@@ -7,9 +7,10 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Directories
-const DATA_DIR = path.join(__dirname, 'data');
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
+// Vercel Serverless & Local Directories
+const isVercel = !!process.env.VERCEL;
+const DATA_DIR = isVercel ? path.join('/tmp', 'data') : path.join(__dirname, 'data');
+const UPLOADS_DIR = isVercel ? path.join('/tmp', 'uploads') : path.join(__dirname, 'uploads');
 const MEMORIES_FILE = path.join(DATA_DIR, 'memories.json');
 const CONFIG_FILE = path.join(DATA_DIR, 'config.json');
 
@@ -17,10 +18,22 @@ const CONFIG_FILE = path.join(DATA_DIR, 'config.json');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
+// If on Vercel, copy initial seed files from repo to /tmp
+if (isVercel) {
+  const localDataDir = path.join(__dirname, 'data');
+  if (fs.existsSync(path.join(localDataDir, 'config.json')) && !fs.existsSync(CONFIG_FILE)) {
+    try { fs.copyFileSync(path.join(localDataDir, 'config.json'), CONFIG_FILE); } catch (_) {}
+  }
+  if (fs.existsSync(path.join(localDataDir, 'memories.json')) && !fs.existsSync(MEMORIES_FILE)) {
+    try { fs.copyFileSync(path.join(localDataDir, 'memories.json'), MEMORIES_FILE); } catch (_) {}
+  }
+}
+
 // Initialize config if needed
 if (!fs.existsSync(CONFIG_FILE)) {
   const defaultConfig = {
-    vaultPin: '2026', // Default PIN inspired by HackMIT 2026! Can be changed in vault.
+    vaultPassword: 'shaurya2026',
+    vaultPin: '2026',
     title: 'The Friendship Capsule',
     subtitle: 'A private vault of timeless memories for our inner circle'
   };
@@ -72,6 +85,9 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(UPLOADS_DIR));
+if (isVercel) {
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+}
 
 // Helper: auth verification
 function requireVaultAuth(req, res, next) {
@@ -298,8 +314,16 @@ app.post('/api/auth/logout', requireVaultAuth, (req, res) => {
   res.json({ success: true });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`✨ Friendship Capsule Server running at http://localhost:${PORT}`);
-  console.log(`🔐 Default Vault Keeper PIN is: 2026`);
+// Custom 404 Handler
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
+
+// Start server locally (if not on Vercel serverless)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`✨ Friendship Capsule Server running at http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
