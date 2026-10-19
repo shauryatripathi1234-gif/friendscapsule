@@ -67,7 +67,32 @@ function saveConfig(cfg) {
 
 function getMemories() {
   try {
-    return JSON.parse(fs.readFileSync(MEMORIES_FILE, 'utf8'));
+    const list = JSON.parse(fs.readFileSync(MEMORIES_FILE, 'utf8'));
+    let changed = false;
+    // Ensure data portability & privacy defaults
+    const updated = list.map(m => {
+      if (m.isPublic === undefined) {
+        m.isPublic = false;
+        changed = true;
+      }
+      // If photoUrl is still an ephemeral relative /uploads/ path, migrate to embedded base64 if file exists
+      if (m.photoUrl && m.photoUrl.startsWith('/uploads/')) {
+        const localPath = path.join(__dirname, m.photoUrl);
+        if (fs.existsSync(localPath)) {
+          try {
+            const fileData = fs.readFileSync(localPath);
+            const ext = path.extname(localPath).replace('.', '') || 'jpg';
+            m.photoUrl = `data:image/${ext};base64,${fileData.toString('base64')}`;
+            changed = true;
+          } catch (_) {}
+        }
+      }
+      return m;
+    });
+    if (changed) {
+      try { saveMemories(updated); } catch (_) {}
+    }
+    return updated;
   } catch (e) {
     return [];
   }
@@ -141,30 +166,38 @@ app.post('/api/memories', (req, res) => {
       return res.status(400).json({ error: `Note has ${wordCount} words. Limit is strictly 20 words!` });
     }
 
-    // Save photo to file system
-    const id = crypto.randomUUID();
+    // Save backup file locally if possible
     let ext = 'jpg';
     let base64Data = photoBase64;
-
     const matches = photoBase64.match(/^data:image\/([a-zA-Z0-9.+]+);base64,(.+)$/);
     if (matches) {
       ext = matches[1].replace('jpeg', 'jpg');
       base64Data = matches[2];
     }
 
-    const filename = `snap_${Date.now()}_${id.slice(0, 8)}.${ext}`;
-    const filePath = path.join(UPLOADS_DIR, filename);
-    fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+    const id = crypto.randomUUID();
+    try {
+      const filename = `snap_${Date.now()}_${id.slice(0, 8)}.${ext}`;
+      const filePath = path.join(UPLOADS_DIR, filename);
+      fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
+    } catch (_) {}
+
+    // Store base64 data URL directly so image is 100% portable across ALL devices and hosting platforms!
+    const photoDataUrl = photoBase64.startsWith('data:')
+      ? photoBase64
+      : `data:image/${ext};base64,${base64Data}`;
 
     const newMemory = {
       id,
       friendName: friendName.trim(),
       note: cleanNote,
       wordCount,
-      photoUrl: `/uploads/${filename}`,
-      mood: mood || 'Whimsical',
-      filter: filter || 'normal',
+      photoUrl: photoDataUrl,       // Self-contained data URL: works across any device without disk file dependency
+      photoBase64: photoDataUrl,
+      mood: mood || 'Bakchodi',
+      filter: filter || 'none',
       stickers: Array.isArray(stickers) ? stickers : [],
+      isPublic: false,             // PRIVACY: False by default! Only Shaurya can see it until approved
       createdAt: new Date().toISOString()
     };
 
@@ -267,19 +300,41 @@ app.delete('/api/vault/memories/:id', requireVaultAuth, (req, res) => {
   const target = memories.find(m => m.id === id);
 
   if (target) {
-    // Try to remove file
-    if (target.photoUrl && target.photoUrl.startsWith('/uploads/')) {
-      const filePath = path.join(__dirname, target.photoUrl);
-      if (fs.existsSync(filePath)) {
-        try { fs.unlinkSync(filePath); } catch (e) { /* ignore */ }
-      }
-    }
     memories = memories.filter(m => m.id !== id);
     saveMemories(memories);
     res.json({ success: true, message: 'Memory removed from vault.' });
   } else {
     res.status(404).json({ error: 'Memory not found' });
   }
+});
+
+// Toggle memory public visibility in Friends Capsule (HOST ONLY)
+app.post('/api/vault/memories/:id/toggle-public', requireVaultAuth, (req, res) => {
+  const { id } = req.params;
+  let memories = getMemories();
+  const target = memories.find(m => m.id === id);
+
+  if (target) {
+    target.isPublic = !target.isPublic;
+    saveMemories(memories);
+    res.json({
+      success: true,
+      isPublic: target.isPublic,
+      message: target.isPublic ? 'Memory is now visible in Friends Capsule!' : 'Memory is now private to Shaurya only.'
+    });
+  } else {
+    res.status(404).json({ error: 'Memory not found' });
+  }
+});
+
+// Get Publicly Approved Memories for Friends Column (PUBLIC)
+app.get('/api/memories/public', (req, res) => {
+  const memories = getMemories();
+  const publicList = memories.filter(m => m.isPublic === true);
+  res.json({
+    total: publicList.length,
+    memories: publicList
+  });
 });
 
 // Update Password while inside Vault (HOST ONLY)

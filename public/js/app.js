@@ -139,6 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const receiptMemoryId = document.getElementById('receiptMemoryId');
   const resetPostcardBtn = document.getElementById('resetPostcardBtn');
 
+  // Friends' Capsule Public Elements
+  const publicCapsuleGrid = document.getElementById('publicCapsuleGrid');
+  const publicCapsuleEmptyState = document.getElementById('publicCapsuleEmptyState');
+  const publicCapsuleCountBadge = document.getElementById('publicCapsuleCountBadge');
+
   // Quotes Lore Elements
   const quoteTickerText = document.getElementById('quoteTickerText');
   const nextQuoteBtn = document.getElementById('nextQuoteBtn');
@@ -198,6 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const detailNoteText = document.getElementById('detailNoteText');
   const downloadKeepsakeBtn = document.getElementById('downloadKeepsakeBtn');
   const deleteMemoryBtn = document.getElementById('deleteMemoryBtn');
+  const detailTogglePublicBtn = document.getElementById('detailTogglePublicBtn');
+  const detailTogglePublicText = document.getElementById('detailTogglePublicText');
 
   // Slideshow Elements
   const slideshowModal = document.getElementById('slideshowModal');
@@ -1144,7 +1151,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tape.className = `washi-tape -top-3 left-1/2 -translate-x-1/2 w-24 h-5 ${tapeColor} rotate-1`;
       card.appendChild(tape);
 
-      // Photo
+      // Photo (uses portable base64 data URL directly)
       const photoBox = document.createElement('div');
       photoBox.className = 'relative aspect-[4/3] bg-pitch-black overflow-hidden border-2 border-black mb-2';
       photoBox.innerHTML = `
@@ -1159,6 +1166,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const infoBox = document.createElement('div');
       infoBox.className = 'flex flex-col gap-1';
       const formattedDate = new Date(mem.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+      
+      const privacyBadge = mem.isPublic
+        ? `<span class="px-1.5 py-0.5 bg-green-600 text-white font-code-snippet text-[9px] font-black uppercase border border-black">★ IN FRIENDS CAPSULE</span>`
+        : `<span class="px-1.5 py-0.5 bg-pitch-black text-canary-yellow font-code-snippet text-[9px] font-black uppercase border border-black">🔒 PRIVATE (SHAURYA ONLY)</span>`;
+
+      const privacyAction = mem.isPublic
+        ? `<button type="button" class="toggle-public-btn text-[10px] font-black uppercase text-retro-pink hover:text-black font-code-snippet underline">🔒 Hide from Friends</button>`
+        : `<button type="button" class="toggle-public-btn text-[10px] font-black uppercase text-electric-blue hover:text-black font-code-snippet underline">👁️ Show in Friends Column</button>`;
+
       infoBox.innerHTML = `
         <div class="flex items-center justify-between border-b border-black pb-1">
           <span class="font-headline-sm text-sm uppercase text-black font-black truncate">${mem.friendName}</span>
@@ -1167,8 +1183,22 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="font-code-snippet text-xs text-pitch-black font-bold mt-1 line-clamp-3">
           "${mem.note}"
         </p>
+        <div class="mt-2 pt-1.5 border-t border-black/40 flex items-center justify-between gap-1">
+          ${privacyBadge}
+          ${privacyAction}
+        </div>
       `;
       card.appendChild(infoBox);
+
+      // Privacy toggle handler on card
+      const toggleBtn = card.querySelector('.toggle-public-btn');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          AudioEngine.playPop();
+          await toggleMemoryPrivacy(mem.id);
+        });
+      }
 
       card.addEventListener('click', () => {
         openDetailModal(mem);
@@ -1176,6 +1206,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
       corkboardGrid.appendChild(card);
     });
+  }
+
+  // Toggle memory privacy on server
+  async function toggleMemoryPrivacy(id) {
+    if (!vaultToken) return;
+    try {
+      const res = await fetch(`/api/vault/memories/${id}/toggle-public`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${vaultToken}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const mem = allVaultMemories.find(m => m.id === id);
+        if (mem) mem.isPublic = data.isPublic;
+        renderVaultCorkboard();
+        loadPublicMemories();
+        if (activeDetailMemory && activeDetailMemory.id === id) {
+          activeDetailMemory.isPublic = data.isPublic;
+          updateDetailModalPrivacyUI();
+        }
+      }
+    } catch (err) {
+      alert("Failed to update privacy: " + err.message);
+    }
   }
 
   // Vault Filters & Search
@@ -1207,6 +1261,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Update Detail Modal Privacy UI
+  function updateDetailModalPrivacyUI() {
+    if (!activeDetailMemory || !detailTogglePublicBtn || !detailTogglePublicText) return;
+    if (activeDetailMemory.isPublic) {
+      detailTogglePublicBtn.className = 'px-3 py-2 bg-retro-pink text-white border-2 border-black font-headline-sm text-xs font-black uppercase shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1';
+      detailTogglePublicText.textContent = '🔒 HIDE FROM FRIENDS';
+    } else {
+      detailTogglePublicBtn.className = 'px-3 py-2 bg-electric-blue text-white border-2 border-black font-headline-sm text-xs font-black uppercase shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1';
+      detailTogglePublicText.textContent = '👁️ SHOW IN FRIENDS COLUMN';
+    }
+  }
+
   // Detail Modal Inspector
   function openDetailModal(mem) {
     activeDetailMemory = mem;
@@ -1216,7 +1282,92 @@ document.addEventListener('DOMContentLoaded', () => {
     detailFriendName.textContent = mem.friendName;
     detailWordCount.textContent = `${mem.wordCount || mem.note.split(/\s+/).length} WORDS`;
     detailNoteText.textContent = `"${mem.note}"`;
+
+    // Only show host controls if authenticated as host
+    if (vaultToken) {
+      if (deleteMemoryBtn) deleteMemoryBtn.classList.remove('hidden');
+      if (detailTogglePublicBtn) {
+        detailTogglePublicBtn.classList.remove('hidden');
+        updateDetailModalPrivacyUI();
+      }
+    } else {
+      if (deleteMemoryBtn) deleteMemoryBtn.classList.add('hidden');
+      if (detailTogglePublicBtn) detailTogglePublicBtn.classList.add('hidden');
+    }
+
     detailModal.classList.remove('hidden');
+  }
+
+  if (detailTogglePublicBtn) {
+    detailTogglePublicBtn.addEventListener('click', async () => {
+      if (!activeDetailMemory || !vaultToken) return;
+      AudioEngine.playPop();
+      await toggleMemoryPrivacy(activeDetailMemory.id);
+    });
+  }
+
+  // ================= 8. PUBLIC FRIENDS' CAPSULE COLUMN =================
+  async function loadPublicMemories() {
+    if (!publicCapsuleGrid) return;
+    try {
+      const res = await fetch('/api/memories/public');
+      if (!res.ok) return;
+      const data = await res.json();
+      const memories = data.memories || [];
+
+      if (publicCapsuleCountBadge) {
+        publicCapsuleCountBadge.textContent = `APPROVED MOMENTS: ${memories.length}`;
+      }
+
+      publicCapsuleGrid.innerHTML = '';
+      if (memories.length === 0) {
+        if (publicCapsuleEmptyState) publicCapsuleEmptyState.classList.remove('hidden');
+        return;
+      }
+      if (publicCapsuleEmptyState) publicCapsuleEmptyState.classList.add('hidden');
+
+      memories.forEach((mem, i) => {
+        const rot = (i % 2 === 0 ? -1 : 1) * (1 + (i % 3));
+        const card = document.createElement('div');
+        card.className = 'polaroid-card p-3 relative cursor-pointer group flex flex-col justify-between';
+        card.style.transform = `rotate(${rot}deg)`;
+
+        const tapeColor = i % 2 === 0 ? 'bg-canary-yellow' : 'bg-retro-pink';
+        const tape = document.createElement('div');
+        tape.className = `washi-tape -top-3 left-1/2 -translate-x-1/2 w-24 h-5 ${tapeColor} rotate-1`;
+        card.appendChild(tape);
+
+        const photoBox = document.createElement('div');
+        photoBox.className = 'relative aspect-[4/3] bg-pitch-black overflow-hidden border-2 border-black mb-2';
+        photoBox.innerHTML = `
+          <img src="${mem.photoUrl}" alt="${mem.friendName}" class="w-full h-full object-cover">
+          <span class="absolute bottom-1 right-1 px-1.5 py-0.5 bg-pitch-black/80 text-white font-code-snippet text-[9px] font-black uppercase">
+            ${mem.mood || 'RAW'}
+          </span>
+        `;
+        card.appendChild(photoBox);
+
+        const infoBox = document.createElement('div');
+        infoBox.className = 'flex flex-col gap-1';
+        const formattedDate = new Date(mem.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+        infoBox.innerHTML = `
+          <div class="flex items-center justify-between border-b border-black pb-1">
+            <span class="font-headline-sm text-sm uppercase text-black font-black truncate">${mem.friendName}</span>
+            <span class="font-code-snippet text-[10px] text-gray-600 font-bold">${formattedDate}</span>
+          </div>
+          <p class="font-code-snippet text-xs text-pitch-black font-bold mt-1 line-clamp-3">
+            "${mem.note}"
+          </p>
+        `;
+        card.appendChild(infoBox);
+
+        card.addEventListener('click', () => {
+          openDetailModal(mem);
+        });
+
+        publicCapsuleGrid.appendChild(card);
+      });
+    } catch (_) {}
   }
 
   if (closeDetailModalBtn && detailModal) {
