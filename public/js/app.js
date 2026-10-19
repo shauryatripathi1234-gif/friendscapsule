@@ -1081,10 +1081,38 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ================= 7. SHAURYA'S PRIVATE VAULT SANCTUARY =================
+  const vaultCloudStatusBanner = document.getElementById('vaultCloudStatusBanner');
+  const vaultCloudStatusText = document.getElementById('vaultCloudStatusText');
+  const vaultCloudActionArea = document.getElementById('vaultCloudActionArea');
+
+  async function checkCloudStatus() {
+    if (!vaultCloudStatusText) return;
+    try {
+      const res = await fetch('/api/health-cloud');
+      const data = await res.json();
+      if (data.cloudConnected) {
+        if (vaultCloudStatusBanner) {
+          vaultCloudStatusBanner.className = 'bg-[#DCFCE7] border-4 border-black p-3 mb-6 shadow-[5px_5px_0px_#000] flex flex-wrap items-center justify-between gap-2';
+        }
+        vaultCloudStatusText.innerHTML = `✓ <strong>LIVE CLOUD SYNC ACTIVE (${data.provider})</strong>: Memories sync live across your laptop, phone & comrades.`;
+        if (vaultCloudActionArea) vaultCloudActionArea.innerHTML = `<span class="px-2 py-0.5 bg-green-700 text-white font-code-snippet text-[11px] font-black uppercase border border-black">SYNCED</span>`;
+      } else {
+        if (vaultCloudStatusBanner) {
+          vaultCloudStatusBanner.className = 'bg-[#FEF08A] border-4 border-black p-3 mb-6 shadow-[5px_5px_0px_#000] flex flex-wrap items-center justify-between gap-2';
+        }
+        vaultCloudStatusText.innerHTML = `⚡ <strong>MULTI-DEVICE PERSISTENCE ON VERCEL:</strong> To sync snapshots between phone and laptop on Vercel, connect free <strong>Vercel KV</strong> under your Vercel Dashboard Storage tab.`;
+        if (vaultCloudActionArea) {
+          vaultCloudActionArea.innerHTML = `<a href="https://vercel.com/docs/storage/vercel-kv" target="_blank" class="underline text-black font-black hover:text-retro-pink">1-CLICK KV ↗</a>`;
+        }
+      }
+    } catch (_) {}
+  }
+
   function openVaultSanctuary() {
     if (publicViewContainer) publicViewContainer.classList.add('hidden');
     if (vaultSanctuaryView) vaultSanctuaryView.classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    checkCloudStatus();
     loadVaultMemories();
   }
 

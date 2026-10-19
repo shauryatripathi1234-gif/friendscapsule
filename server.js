@@ -45,15 +45,59 @@ if (!fs.existsSync(MEMORIES_FILE)) {
   fs.writeFileSync(MEMORIES_FILE, JSON.stringify([], null, 2));
 }
 
-// In-memory active vault sessions (tokens)
+// Cloud Database Connections (Vercel KV / Upstash Redis / Firebase)
+const KV_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const FIREBASE_DB_URL = process.env.FIREBASE_DATABASE_URL;
+const JWT_SECRET = process.env.JWT_SECRET || 'tripathi_friendship_vault_secret_2026';
+
+// In-memory active vault sessions (tokens fallback)
 const activeSessions = new Set();
 
-function getConfig() {
+// Stateless HMAC auth token generator (essential for multi-instance Vercel Serverless)
+function generateAuthToken() {
+  const payload = { role: 'keeper', exp: Date.now() + 7 * 24 * 60 * 60 * 1000 };
+  const str = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const sig = crypto.createHmac('sha256', JWT_SECRET).update(str).digest('base64url');
+  return `${str}.${sig}`;
+}
+
+function verifyAuthToken(token) {
+  if (!token) return false;
+  if (activeSessions.has(token)) return true;
+  if (!token.includes('.')) return false;
+  const [str, sig] = token.split('.');
+  const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(str).digest('base64url');
+  if (sig !== expectedSig) return false;
+  try {
+    const payload = JSON.parse(Buffer.from(str, 'base64url').toString('utf8'));
+    return payload && payload.exp > Date.now();
+  } catch (_) {
+    return false;
+  }
+}
+
+async function getConfig() {
+  // 1. Try Vercel KV
+  if (KV_URL && KV_TOKEN) {
+    try {
+      const res = await fetch(`${KV_URL}/get/friendscapsule_config`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      });
+      const data = await res.json();
+      if (data && data.result) {
+        const parsed = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (_) {}
+  }
+
+  // 2. Local Fallback
   try {
     const cfg = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
     if (!cfg.vaultPassword) {
       cfg.vaultPassword = cfg.vaultPin || 'shaurya2026';
-      saveConfig(cfg);
+      await saveConfig(cfg);
     }
     return cfg;
   } catch (e) {
@@ -61,21 +105,61 @@ function getConfig() {
   }
 }
 
-function saveConfig(cfg) {
-  fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg, null, 2));
+async function saveConfig(cfg) {
+  if (KV_URL && KV_TOKEN) {
+    try {
+      await fetch(`${KV_URL}/set/friendscapsule_config`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${KV_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cfg)
+      });
+    } catch (_) {}
+  }
+  try { fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg, null, 2)); } catch (_) {}
 }
 
-function getMemories() {
+async function getMemories() {
+  // 1. Try Vercel KV / Upstash Redis (Shared cloud database across all devices!)
+  if (KV_URL && KV_TOKEN) {
+    try {
+      const res = await fetch(`${KV_URL}/get/friendscapsule_memories`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      });
+      const data = await res.json();
+      if (data && data.result) {
+        const parsed = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (err) {
+      console.warn('Vercel KV read error, falling back to local:', err.message);
+    }
+  }
+
+  // 2. Try Firebase Realtime Database
+  if (FIREBASE_DB_URL) {
+    try {
+      const cleanUrl = FIREBASE_DB_URL.replace(/\/$/, '');
+      const res = await fetch(`${cleanUrl}/memories.json`);
+      const data = await res.json();
+      if (data && Array.isArray(data)) return data;
+      if (data && typeof data === 'object') return Object.values(data);
+    } catch (err) {
+      console.warn('Firebase read error, falling back to local:', err.message);
+    }
+  }
+
+  // 3. Fallback to Local/Seed file
   try {
     const list = JSON.parse(fs.readFileSync(MEMORIES_FILE, 'utf8'));
     let changed = false;
-    // Ensure data portability & privacy defaults
     const updated = list.map(m => {
       if (m.isPublic === undefined) {
         m.isPublic = false;
         changed = true;
       }
-      // If photoUrl is still an ephemeral relative /uploads/ path, migrate to embedded base64 if file exists
       if (m.photoUrl && m.photoUrl.startsWith('/uploads/')) {
         const localPath = path.join(__dirname, m.photoUrl);
         if (fs.existsSync(localPath)) {
@@ -90,7 +174,7 @@ function getMemories() {
       return m;
     });
     if (changed) {
-      try { saveMemories(updated); } catch (_) {}
+      try { fs.writeFileSync(MEMORIES_FILE, JSON.stringify(updated, null, 2)); } catch (_) {}
     }
     return updated;
   } catch (e) {
@@ -98,8 +182,41 @@ function getMemories() {
   }
 }
 
-function saveMemories(memories) {
-  fs.writeFileSync(MEMORIES_FILE, JSON.stringify(memories, null, 2));
+async function saveMemories(memories) {
+  // 1. Save to Vercel KV / Upstash if configured
+  if (KV_URL && KV_TOKEN) {
+    try {
+      await fetch(`${KV_URL}/set/friendscapsule_memories`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${KV_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(memories)
+      });
+    } catch (err) {
+      console.warn('Vercel KV write error:', err.message);
+    }
+  }
+
+  // 2. Save to Firebase Realtime Database if configured
+  if (FIREBASE_DB_URL) {
+    try {
+      const cleanUrl = FIREBASE_DB_URL.replace(/\/$/, '');
+      await fetch(`${cleanUrl}/memories.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(memories)
+      });
+    } catch (err) {
+      console.warn('Firebase write error:', err.message);
+    }
+  }
+
+  // 3. Save locally
+  try {
+    fs.writeFileSync(MEMORIES_FILE, JSON.stringify(memories, null, 2));
+  } catch (_) {}
 }
 
 // Middleware
@@ -121,7 +238,7 @@ function requireVaultAuth(req, res, next) {
     return res.status(401).json({ error: 'Missing authorization token' });
   }
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  if (!activeSessions.has(token)) {
+  if (!verifyAuthToken(token)) {
     return res.status(401).json({ error: 'Unauthorized or session expired' });
   }
   next();
@@ -135,20 +252,34 @@ function countWords(str) {
 
 // ------------------- PUBLIC ENDPOINTS -------------------
 
-// Public Status (returns title, counts, but NO photos or notes)
-app.get('/api/status', (req, res) => {
-  const cfg = getConfig();
-  const memories = getMemories();
+// Cloud health & database connection diagnostic
+app.get('/api/health-cloud', (req, res) => {
+  const hasKV = !!(KV_URL && KV_TOKEN);
+  const hasFirebase = !!FIREBASE_DB_URL;
+  res.json({
+    isVercel,
+    cloudConnected: hasKV || hasFirebase,
+    provider: hasKV ? 'Vercel KV (Upstash)' : (hasFirebase ? 'Firebase Realtime DB' : 'Local Disk'),
+    notice: (hasKV || hasFirebase)
+      ? 'Cloud storage is active. Memories sync in real time across all devices!'
+      : 'Vercel is running on ephemeral storage. Connect 1-click Vercel KV for persistent cross-device memory sync.'
+  });
+});
+
+// Public Status
+app.get('/api/status', async (req, res) => {
+  const cfg = await getConfig();
+  const memories = await getMemories();
   res.json({
     title: cfg.title || 'The Friendship Capsule',
     subtitle: cfg.subtitle || '',
     totalMemories: memories.length,
-    recentNames: memories.slice(-6).map(m => m.friendName) // shows only friend first names for social proof!
+    recentNames: memories.slice(-6).map(m => m.friendName)
   });
 });
 
 // Friend submits a memory
-app.post('/api/memories', (req, res) => {
+app.post('/api/memories', async (req, res) => {
   try {
     const { friendName, note, photoBase64, mood, filter, stickers } = req.body;
 
@@ -166,7 +297,6 @@ app.post('/api/memories', (req, res) => {
       return res.status(400).json({ error: `Note has ${wordCount} words. Limit is strictly 20 words!` });
     }
 
-    // Save backup file locally if possible
     let ext = 'jpg';
     let base64Data = photoBase64;
     const matches = photoBase64.match(/^data:image\/([a-zA-Z0-9.+]+);base64,(.+)$/);
@@ -182,7 +312,6 @@ app.post('/api/memories', (req, res) => {
       fs.writeFileSync(filePath, Buffer.from(base64Data, 'base64'));
     } catch (_) {}
 
-    // Store base64 data URL directly so image is 100% portable across ALL devices and hosting platforms!
     const photoDataUrl = photoBase64.startsWith('data:')
       ? photoBase64
       : `data:image/${ext};base64,${base64Data}`;
@@ -192,7 +321,7 @@ app.post('/api/memories', (req, res) => {
       friendName: friendName.trim(),
       note: cleanNote,
       wordCount,
-      photoUrl: photoDataUrl,       // Self-contained data URL: works across any device without disk file dependency
+      photoUrl: photoDataUrl,       // Portable Base64: loads instantly on any device
       photoBase64: photoDataUrl,
       mood: mood || 'Bakchodi',
       filter: filter || 'none',
@@ -201,9 +330,9 @@ app.post('/api/memories', (req, res) => {
       createdAt: new Date().toISOString()
     };
 
-    const memories = getMemories();
-    memories.unshift(newMemory); // newest first
-    saveMemories(memories);
+    const memories = await getMemories();
+    memories.unshift(newMemory);
+    await saveMemories(memories);
 
     res.json({
       success: true,
@@ -221,16 +350,16 @@ app.post('/api/memories', (req, res) => {
 });
 
 // Host login (Enter Password)
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   const inputPassword = (req.body.password || req.body.pin || '').toString().trim();
-  const cfg = getConfig();
+  const cfg = await getConfig();
   const currentPassword = (cfg.vaultPassword || cfg.vaultPin || 'shaurya2026').toString().trim();
 
   if (!inputPassword || inputPassword !== currentPassword) {
     return res.status(401).json({ error: 'Incorrect Keeper Password. Access denied.' });
   }
 
-  const token = crypto.randomBytes(32).toString('hex');
+  const token = generateAuthToken();
   activeSessions.add(token);
 
   res.json({
@@ -241,9 +370,9 @@ app.post('/api/auth/login', (req, res) => {
 });
 
 // Change Password from any device (verifying current/previous password)
-app.post('/api/auth/change-password', (req, res) => {
+app.post('/api/auth/change-password', async (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  const cfg = getConfig();
+  const cfg = await getConfig();
   const activePassword = (cfg.vaultPassword || cfg.vaultPin || 'shaurya2026').toString().trim();
   const prevPassword = (cfg.previousPassword || '').toString().trim();
 
@@ -254,7 +383,6 @@ app.post('/api/auth/change-password', (req, res) => {
   const cleanCurrent = currentPassword.toString().trim();
   const cleanNew = newPassword.toString().trim();
 
-  // Allow change if matching current active password OR last previous password
   if (cleanCurrent !== activePassword && cleanCurrent !== prevPassword) {
     return res.status(401).json({ error: 'Current/previous password is incorrect. Verification failed.' });
   }
@@ -265,8 +393,8 @@ app.post('/api/auth/change-password', (req, res) => {
 
   cfg.previousPassword = activePassword;
   cfg.vaultPassword = cleanNew;
-  cfg.vaultPin = cleanNew; // maintain backwards compat
-  saveConfig(cfg);
+  cfg.vaultPin = cleanNew;
+  await saveConfig(cfg);
 
   res.json({
     success: true,
@@ -279,14 +407,14 @@ app.get('/api/auth/verify', (req, res) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.json({ authenticated: false });
   const token = authHeader.replace(/^Bearer\s+/i, '').trim();
-  res.json({ authenticated: activeSessions.has(token) });
+  res.json({ authenticated: verifyAuthToken(token) });
 });
 
 // ------------------- PROTECTED VAULT ENDPOINTS -------------------
 
 // Get all memories (HOST ONLY)
-app.get('/api/vault/memories', requireVaultAuth, (req, res) => {
-  const memories = getMemories();
+app.get('/api/vault/memories', requireVaultAuth, async (req, res) => {
+  const memories = await getMemories();
   res.json({
     total: memories.length,
     memories
@@ -294,14 +422,14 @@ app.get('/api/vault/memories', requireVaultAuth, (req, res) => {
 });
 
 // Delete a memory (HOST ONLY)
-app.delete('/api/vault/memories/:id', requireVaultAuth, (req, res) => {
+app.delete('/api/vault/memories/:id', requireVaultAuth, async (req, res) => {
   const { id } = req.params;
-  let memories = getMemories();
+  let memories = await getMemories();
   const target = memories.find(m => m.id === id);
 
   if (target) {
     memories = memories.filter(m => m.id !== id);
-    saveMemories(memories);
+    await saveMemories(memories);
     res.json({ success: true, message: 'Memory removed from vault.' });
   } else {
     res.status(404).json({ error: 'Memory not found' });
@@ -309,14 +437,14 @@ app.delete('/api/vault/memories/:id', requireVaultAuth, (req, res) => {
 });
 
 // Toggle memory public visibility in Friends Capsule (HOST ONLY)
-app.post('/api/vault/memories/:id/toggle-public', requireVaultAuth, (req, res) => {
+app.post('/api/vault/memories/:id/toggle-public', requireVaultAuth, async (req, res) => {
   const { id } = req.params;
-  let memories = getMemories();
+  let memories = await getMemories();
   const target = memories.find(m => m.id === id);
 
   if (target) {
     target.isPublic = !target.isPublic;
-    saveMemories(memories);
+    await saveMemories(memories);
     res.json({
       success: true,
       isPublic: target.isPublic,
@@ -328,8 +456,8 @@ app.post('/api/vault/memories/:id/toggle-public', requireVaultAuth, (req, res) =
 });
 
 // Get Publicly Approved Memories for Friends Column (PUBLIC)
-app.get('/api/memories/public', (req, res) => {
-  const memories = getMemories();
+app.get('/api/memories/public', async (req, res) => {
+  const memories = await getMemories();
   const publicList = memories.filter(m => m.isPublic === true);
   res.json({
     total: publicList.length,
@@ -338,24 +466,24 @@ app.get('/api/memories/public', (req, res) => {
 });
 
 // Update Password while inside Vault (HOST ONLY)
-app.post('/api/vault/update-pin', requireVaultAuth, (req, res) => {
+app.post('/api/vault/update-pin', requireVaultAuth, async (req, res) => {
   const newPass = (req.body.newPassword || req.body.newPin || '').toString().trim();
   if (!newPass || newPass.length < 4) {
     return res.status(400).json({ error: 'Password must be at least 4 characters long.' });
   }
 
-  const cfg = getConfig();
+  const cfg = await getConfig();
   cfg.previousPassword = cfg.vaultPassword || cfg.vaultPin || 'shaurya2026';
   cfg.vaultPassword = newPass;
   cfg.vaultPin = newPass;
-  saveConfig(cfg);
+  await saveConfig(cfg);
 
   res.json({ success: true, message: 'Vault Password updated successfully.' });
 });
 
 // Export all memories data (HOST ONLY)
-app.get('/api/vault/export', requireVaultAuth, (req, res) => {
-  const memories = getMemories();
+app.get('/api/vault/export', requireVaultAuth, async (req, res) => {
+  const memories = await getMemories();
   res.setHeader('Content-Disposition', 'attachment; filename=friendship_vault_backup.json');
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(memories, null, 2));
