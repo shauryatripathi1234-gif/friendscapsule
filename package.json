@@ -1,0 +1,14 @@
+{
+  "name": "friend-capsule",
+  "version": "1.0.0",
+  "description": "A private, HackMIT-inspired whimsical friend memory capsule & secret vault",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5"
+  }
+}

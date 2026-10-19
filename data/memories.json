@@ -1,0 +1,56 @@
+[
+  {
+    "id": "77913d26-1e2a-426d-8866-70bff972e6d0",
+    "friendName": "tinkujiya",
+    "note": "gg",
+    "wordCount": 1,
+    "photoUrl": "/uploads/snap_1792346956952_77913d26.jpg",
+    "mood": "Wholesome",
+    "filter": "warm",
+    "stickers": [
+      {
+        "emoji": "☕ भाई",
+        "x": 31,
+        "y": 73,
+        "rot": 17
+      },
+      {
+        "emoji": "👑 100% असली",
+        "x": 46,
+        "y": 16,
+        "rot": -14
+      },
+      {
+        "emoji": "⚡ CHAOS",
+        "x": 67,
+        "y": 47,
+        "rot": -20
+      }
+    ],
+    "createdAt": "2026-10-18T18:09:16.960Z"
+  },
+  {
+    "id": "demo-seed-01",
+    "friendName": "Aarav (Chai Partner)",
+    "note": "Tripathi bhai, remember that insane chai session at 2am? You are a legend. Stay forever crazy!",
+    "wordCount": 17,
+    "photoUrl": "/uploads/demo_friend_1.jpg",
+    "mood": "Wholesome",
+    "filter": "warm",
+    "stickers": [
+      {
+        "emoji": "☕",
+        "x": 82,
+        "y": 20,
+        "rot": 12
+      },
+      {
+        "emoji": "⭐",
+        "x": 18,
+        "y": 80,
+        "rot": -15
+      }
+    ],
+    "createdAt": "2026-10-18T18:00:00.000Z"
+  }
+]
