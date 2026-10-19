@@ -1,5 +1,41 @@
 [
   {
+    "id": "e3f182ef-8e66-4ce7-862b-a635cc2a4a17",
+    "friendName": "Chai Lover Shaurya",
+    "note": "Bhai cutting chai aur midnight baatein are forever. Vault sealed!",
+    "wordCount": 10,
+    "photoUrl": "/uploads/snap_1792418524512_e3f182ef.jpg",
+    "mood": "Chai & Rant",
+    "filter": "none",
+    "stickers": [
+      {
+        "emoji": "",
+        "x": 24,
+        "y": 412,
+        "rot": 0
+      },
+      {
+        "emoji": "",
+        "x": 480,
+        "y": 36,
+        "rot": 0
+      },
+      {
+        "emoji": "☕ भाई",
+        "x": 304,
+        "y": 226,
+        "rot": 7
+      },
+      {
+        "emoji": "⚡ CHAOS",
+        "x": 329,
+        "y": 263,
+        "rot": 6
+      }
+    ],
+    "createdAt": "2026-10-19T14:02:04.518Z"
+  },
+  {
     "id": "77913d26-1e2a-426d-8866-70bff972e6d0",
     "friendName": "tinkujiya",
     "note": "gg",

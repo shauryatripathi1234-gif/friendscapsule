@@ -37,9 +37,14 @@ const activeSessions = new Set();
 
 function getConfig() {
   try {
-    return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+    const cfg = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+    if (!cfg.vaultPassword) {
+      cfg.vaultPassword = cfg.vaultPin || 'shaurya2026';
+      saveConfig(cfg);
+    }
+    return cfg;
   } catch (e) {
-    return { vaultPin: '2026', title: 'The Friendship Capsule' };
+    return { vaultPassword: 'shaurya2026', title: 'The Friendship Capsule' };
   }
 }
 
@@ -166,13 +171,14 @@ app.post('/api/memories', (req, res) => {
   }
 });
 
-// Host login (Enter PIN)
+// Host login (Enter Password)
 app.post('/api/auth/login', (req, res) => {
-  const { pin } = req.body;
+  const inputPassword = (req.body.password || req.body.pin || '').toString().trim();
   const cfg = getConfig();
+  const currentPassword = (cfg.vaultPassword || cfg.vaultPin || 'shaurya2026').toString().trim();
 
-  if (!pin || pin.toString().trim() !== cfg.vaultPin.toString().trim()) {
-    return res.status(401).json({ error: 'Incorrect Keeper PIN. Access denied.' });
+  if (!inputPassword || inputPassword !== currentPassword) {
+    return res.status(401).json({ error: 'Incorrect Keeper Password. Access denied.' });
   }
 
   const token = crypto.randomBytes(32).toString('hex');
@@ -182,6 +188,40 @@ app.post('/api/auth/login', (req, res) => {
     success: true,
     message: 'Welcome back, Vault Keeper!',
     token
+  });
+});
+
+// Change Password from any device (verifying current/previous password)
+app.post('/api/auth/change-password', (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const cfg = getConfig();
+  const activePassword = (cfg.vaultPassword || cfg.vaultPin || 'shaurya2026').toString().trim();
+  const prevPassword = (cfg.previousPassword || '').toString().trim();
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ error: 'Please enter both current/previous password and your new password.' });
+  }
+
+  const cleanCurrent = currentPassword.toString().trim();
+  const cleanNew = newPassword.toString().trim();
+
+  // Allow change if matching current active password OR last previous password
+  if (cleanCurrent !== activePassword && cleanCurrent !== prevPassword) {
+    return res.status(401).json({ error: 'Current/previous password is incorrect. Verification failed.' });
+  }
+
+  if (cleanNew.length < 4) {
+    return res.status(400).json({ error: 'New password must be at least 4 characters.' });
+  }
+
+  cfg.previousPassword = activePassword;
+  cfg.vaultPassword = cleanNew;
+  cfg.vaultPin = cleanNew; // maintain backwards compat
+  saveConfig(cfg);
+
+  res.json({
+    success: true,
+    message: 'Password updated successfully across all devices!'
   });
 });
 
@@ -226,18 +266,20 @@ app.delete('/api/vault/memories/:id', requireVaultAuth, (req, res) => {
   }
 });
 
-// Update PIN (HOST ONLY)
+// Update Password while inside Vault (HOST ONLY)
 app.post('/api/vault/update-pin', requireVaultAuth, (req, res) => {
-  const { newPin } = req.body;
-  if (!newPin || newPin.toString().trim().length < 4) {
-    return res.status(400).json({ error: 'PIN must be at least 4 characters long.' });
+  const newPass = (req.body.newPassword || req.body.newPin || '').toString().trim();
+  if (!newPass || newPass.length < 4) {
+    return res.status(400).json({ error: 'Password must be at least 4 characters long.' });
   }
 
   const cfg = getConfig();
-  cfg.vaultPin = newPin.toString().trim();
+  cfg.previousPassword = cfg.vaultPassword || cfg.vaultPin || 'shaurya2026';
+  cfg.vaultPassword = newPass;
+  cfg.vaultPin = newPass;
   saveConfig(cfg);
 
-  res.json({ success: true, message: 'Vault PIN updated successfully.' });
+  res.json({ success: true, message: 'Vault Password updated successfully.' });
 });
 
 // Export all memories data (HOST ONLY)

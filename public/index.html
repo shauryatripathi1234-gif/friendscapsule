@@ -1,890 +1,1045 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The त्रिपाठी Archive • Shaurya Tripathi's Private Capsule</title>
-  <meta name="description" content="Shaurya Tripathi's (त्रिपाठी) private time capsule. For real friends only: snap your photo, write a 20-word whisper, and seal it into the vault." />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Tripathi Archive • Shaurya's Friendship Capsule & Vault</title>
+  <meta name="description" content="Shaurya Tripathi's uncurated private friendship capsule. For the inner circle only: snap candid photos, slap desi stickers, drop a 20-word whisper, and seal it in the vault.">
 
-  <!-- Google Fonts: English Editorial + Funky Devanagari + Handwriting -->
+  <!-- Google Fonts: Outfit (Display Headlines), Space Mono (Monospace/Body), Yatra One (Hindi/Devanagari) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@700;800;900&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,500;1,700&family=Rozha+One&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Yatra+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Yatra+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "electric-blue": "#2563EB",
+            "electric-cobalt": "#1D4ED8",
+            "canary-yellow": "#FACC15",
+            "butter-yellow": "#FFE033",
+            "retro-pink": "#EC4899",
+            "hot-pink": "#F43F5E",
+            "soft-pink": "#FB7185",
+            "pitch-black": "#0A0A0E",
+            "paper-shadow": "#000000",
+            "surface": "#FFFDF7",
+            "surface-container": "#FEFCE8",
+            "background": "#FFFBEB"
+          },
+          fontFamily: {
+            "headline-lg": ["Outfit", "sans-serif"],
+            "headline-md": ["Outfit", "sans-serif"],
+            "headline-sm": ["Outfit", "sans-serif"],
+            "display-hero": ["Outfit", "sans-serif"],
+            "body-md": ["Space Mono", "monospace"],
+            "body-sm": ["Space Mono", "monospace"],
+            "code-snippet": ["Space Mono", "monospace"],
+            "devanagari": ["Yatra One", "Outfit", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom Neo-Brutalist CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
-<body class="theme-tripathi">
-  <!-- Ambient Stars & Celestial Dust -->
-  <div class="celestial-sky" aria-hidden="true">
-    <div class="star star-1">✦</div>
-    <div class="star star-2">✦</div>
-    <div class="star star-3">✧</div>
-    <div class="star star-4">✦</div>
-    <div class="star star-5">✧</div>
-    <div class="star star-6">✦</div>
-    <div class="star star-7">✧</div>
-    <div class="star star-8">✦</div>
-    <div class="floating-hindi-glyph glyph-1">त्रिपाठी</div>
-    <div class="floating-hindi-glyph glyph-2">त्रिपाठी</div>
-    <div class="floating-hindi-glyph glyph-3">★</div>
-  </div>
 
-  <!-- TOP NAVIGATION BAR -->
-  <header class="capsule-nav" id="capsuleNav">
-    <div class="nav-left">
-      <div class="brand-crest">
-        <div class="crest-mandala-box">
-          <svg class="spin-charm" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="45" stroke="#f3da8e" stroke-width="2.5" stroke-dasharray="6 4" />
-            <polygon points="50,15 60,40 85,50 60,60 50,85 40,60 15,50 40,40" fill="#fdf7ec" />
-            <circle cx="50" cy="50" r="14" fill="#ea616f" />
-          </svg>
-          <span class="hindi-crest-text">त्रि</span>
-        </div>
-        <div class="brand-titles">
-          <span class="brand-code"> TRIPATHI JI KA KHAAS SYSTUM </span>
-          <span class="brand-main">THE <span class="hindi-bold-accent">त्रिपाठी's</span> VAULT</span>
-        </div>
+<body class="bg-[#FEF9EE] font-body-md text-[#0A0A0E] antialiased min-h-screen flex flex-col selection:bg-canary-yellow selection:text-pitch-black">
+
+  <!-- TOP HEADER / NAV BAR -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#FEF9EE]/95 backdrop-blur-md border-b-4 border-black">
+    <!-- Top Cassette Meta Strip -->
+    <div class="bg-pitch-black text-white px-4 md:px-8 py-1.5 flex items-center justify-between overflow-hidden shadow-[0_3px_0px_#000000]">
+      <div class="flex items-center gap-2 font-code-snippet text-xs uppercase tracking-wider">
+        <span class="material-symbols-outlined text-[16px] text-canary-yellow animate-pulse">graphic_eq</span>
+        <span class="text-canary-yellow font-bold">SIDE A // CASSETTE #04:</span>
+        <span class="text-white truncate max-w-xs md:max-w-xl">digital library of my favourite people</span>
+      </div>
+      <div class="hidden md:flex items-center gap-4 font-body-sm text-xs text-canary-yellow font-bold">
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-retro-pink animate-ping"></span>
+          REC [LIVE ARCHIVE]
+        </span>
+        <span class="px-2 py-0.5 bg-electric-blue text-white font-black border border-black">VOL. VII</span>
       </div>
     </div>
 
-    <div class="nav-center">
-      <div class="status-capsule-badge" id="publicCountBadge">
-        <span class="pulse-dot"></span>
-        <span id="statsLabel">SEALED MEMORIES: 0</span>
-      </div>
-    </div>
-
-    <div class="nav-right">
-      <!-- SECRET VAULT TRIGGER (Floating Golden Key for Shaurya Tripathi) -->
-      <button class="secret-key-btn" id="vaultKeyTrigger" title="Tripati's Secret Vault" aria-label="Open Vault Login">
-        <div class="key-wrapper">
-          <svg class="golden-key-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M42 22C42 13.1634 34.8366 6 26 6C17.1634 6 10 13.1634 10 22C10 29.8366 15.6366 36.3634 23 37.7273V52L29 58L35 52V46L30 42V37.7273C37.3634 36.3634 42 29.8366 42 22Z" fill="#fcbc72" stroke="#f3da8e" stroke-width="2.5"/>
-            <circle cx="26" cy="22" r="7" fill="#323e8f" />
-            <path d="M35 52L41 46" stroke="#f3da8e" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M35 44L43 38" stroke="#f3da8e" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
-          <span class="key-glow"></span>
+    <!-- Main Navigation Bar -->
+    <div class="h-20 max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between gap-2">
+      <!-- Brand Crest -->
+      <div class="flex items-center gap-3">
+        <a href="#heroSection" class="relative px-3 py-1.5 bg-canary-yellow -rotate-2 border-3 border-black shadow-[4px_4px_0px_#000000] inline-block hover:rotate-0 transition-transform">
+          <span class="font-headline-sm text-base md:text-lg uppercase text-black font-black">TRIPATHI's ARCHIVE</span>
+          <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-2.5 bg-retro-pink/90 rotate-2 border border-black"></div>
+        </a>
+        <div class="hidden lg:block font-headline-sm text-sm text-pitch-black uppercase font-black tracking-tight">
+          Storybook &amp; Friendship Capsule
         </div>
-        <span class="key-label"><span class="hindi-sub">त्रिपाठी</span>'S KEY 🗝️</span>
-      </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex items-center gap-1 md:gap-2 font-headline-sm text-xs md:text-sm">
+        <a href="#kioskSection" class="px-2.5 md:px-3 py-1.5 font-black uppercase text-black hover:bg-canary-yellow border-2 border-transparent hover:border-black transition-all">
+          Friend's Capsule
+        </a>
+        <button id="navVaultLink" class="px-2.5 md:px-3 py-1.5 font-black uppercase text-black hover:bg-retro-pink hover:text-white border-2 border-transparent hover:border-black transition-all flex items-center gap-1">
+          <span>Shaurya's Vault</span>
+          <span class="text-xs">🔒</span>
+        </button>
+        <a href="#cassetteSection" class="hidden sm:inline-block px-2.5 md:px-3 py-1.5 font-black uppercase text-black hover:bg-electric-blue hover:text-white border-2 border-transparent hover:border-black transition-all">
+          Tapes &amp; Letters
+        </a>
+      </nav>
+
+      <!-- Key Trigger / Avatar -->
+      <div class="flex items-center gap-2">
+        <button id="vaultKeyTrigger" class="flex items-center gap-1.5 px-3 py-1.5 bg-retro-pink text-white border-3 border-black shadow-[3px_3px_0px_#000000] -rotate-2 hover:rotate-0 active:translate-x-1 active:translate-y-1 font-headline-sm font-black text-xs uppercase transition-all">
+          <span class="material-symbols-outlined text-[16px]">key</span>
+          <span>SANCTUARY 🗝️</span>
+        </button>
+        <div class="w-9 h-9 rounded-full bg-electric-blue border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000000] text-white">
+          <span class="material-symbols-outlined text-[20px]">person</span>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- PUBLIC VIEW: FRIEND SUBMISSION EXPERIENCE -->
-  <main class="main-container" id="publicContainer">
-    <!-- HERO SECTION -->
-    <section class="hero-section">
-      <div class="hero-meta">
-        <span class="pill-tag text-coral-tag">● STRICTLY CONFIDENTIAL</span>
-        <span class="pill-divider">◆</span>
-        <span class="pill-tag text-yellow-tag">FOR FRIENDS OF SHAURYA TRIPATHI</span>
-        <span class="pill-divider">◆</span>
-        <span class="pill-tag hindi-pill">★ त्रिपाठी APPROVED ★</span>
+  <!-- MAIN WRAPPER -->
+  <main class="w-full pt-28 bg-[#FEF9EE] max-w-7xl mx-auto px-4 md:px-8 flex-1">
+    
+    <!-- Top Archival Ticker Bar -->
+    <div class="w-full bg-canary-yellow px-4 py-2 border-4 border-black flex flex-wrap items-center justify-between text-pitch-black font-code-snippet text-xs shadow-[5px_5px_0px_#000000] gap-2 mb-6">
+      <div class="flex items-center gap-2 whitespace-nowrap font-bold">
+        <span class="inline-block w-3 h-3 bg-retro-pink rounded-full animate-ping border border-black"></span>
+        <span class="tracking-wider">STATUS: ARCHIVE CELL #882-NORTH ACTIVE</span>
+        <span class="text-pitch-black/80 font-normal hidden md:inline">/ / idhar kya likhun samjh nhi aarha tha.!!</span>
       </div>
-
-      <div class="hero-title-box">
-        <span class="hero-eyebrow">A PRIVATE TIME CAPSULE BY SHAURYA</span>
-        <h1 class="hero-title">
-          <span class="hero-line-english">THE SECRET ARCHIVE OF</span>
-          <span class="hero-line-hindi">“<span class="hindi-glow">त्रिपाठी</span>”<span class="dot-accent">.</span></span>
-        </h1>
+      <div class="flex items-center gap-3 font-headline-sm text-xs font-black">
+        <span class="px-2 py-0.5 bg-white text-black border-2 border-black" id="topMemoryCountBadge">
+          MEMORIES: 0
+        </span>
+        <span class="px-2 py-0.5 bg-retro-pink text-white border-2 border-black">ZINE DISPATCH</span>
       </div>
+    </div>
 
-      <!-- FUNKY STORYBOOK VINTAGE TICKET STUB -->
-      <div class="ticket-stub-ribbon">
-        <div class="ticket-notch left"></div>
-        <div class="ticket-col ticket-meta">
-          <span class="ticket-label">PASS NUMBER</span>
-          <span class="ticket-val">#TRIPATHI-2026-VIP</span>
-        </div>
-        <div class="ticket-divider-line"></div>
-        <div class="ticket-col ticket-destination">
-          <span class="ticket-label">DESTINATION VAULT</span>
-          <span class="ticket-val">SHAURYA'S OFFLINE MUSEUM</span>
-        </div>
-        <div class="ticket-divider-line"></div>
-        <div class="ticket-col ticket-admit">
-          <span class="ticket-label">ADMIT ONE</span>
-          <span class="ticket-val">REAL ONES ONLY (नो फेक वाइब्स)</span>
-        </div>
-        <div class="ticket-notch right"></div>
-      </div>
+    <!-- ================= PUBLIC SUBMISSION CONTAINER ================= -->
+    <div id="publicViewContainer" class="flex flex-col w-full">
 
-      <p class="hero-manifesto">
-        Hey! If you received this link, you survived my unhinged jokes, 2 AM life lectures, or late night adventures.
-        Don't overthink this: <strong>snap your face</strong>, drop a <strong>20-word whisper</strong>, and seal it into the vault.
-        Only <em>Shaurya (त्रिपाठी)</em> holds the golden key to unlock it.
-      </p>
+      <!-- SECTION 1: Massive Bold Masthead & Clean Personal Header -->
+      <section id="heroSection" class="relative w-full pt-2 pb-6">
+        <!-- Corner Washi Tapes -->
+        <div class="absolute -top-2 left-6 md:left-14 w-32 h-8 bg-retro-pink -rotate-6 border-2 border-black shadow-[2px_2px_0px_#000000] z-20 pointer-events-none"></div>
+        <div class="absolute -top-1 right-8 md:right-20 w-36 h-8 bg-electric-blue rotate-3 border-2 border-black shadow-[2px_2px_0px_#000000] z-20 pointer-events-none"></div>
 
-      <!-- TICKER MARQUEE -->
-      <div class="retro-ticker-container">
-        <div class="ticker-track">
-          <span class="ticker-item">✦ SHAURYA TRIPATHI</span>
-          <span class="ticker-item">★ 100% असली दोस्त</span>
-          <span class="ticker-item">✦ STRICTLY 20 WORDS MAXIMUM</span>
-          <span class="ticker-item">★ NO FILTERS REQUIRED</span>
-          <span class="ticker-item">✦ त्रिपाठी TIME CAPSULE</span>
-          <span class="ticker-item">★ CHAI, LAUGHTER & DEEP TALKS</span>
-          <span class="ticker-item">✦ SHAURYA TRIPATHI</span>
-          <span class="ticker-item">★ 100% असली दोस्त</span>
-          <span class="ticker-item">✦ STRICTLY 20 WORDS MAXIMUM</span>
-          <span class="ticker-item">★ त्रिपाठी TIME CAPSULE</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- STORYBOOK MANIFESTO: "A QUICK WORD FROM TRIPATHI" -->
-    <section class="tripathi-story-card">
-      <div class="tripathi-badge-stamp">
-        <span class="stamp-circ-hindi">त्रिपाठी</span>
-        <span class="stamp-circ-sub">OFFICIAL SEAL</span>
-      </div>
-      <div class="tripathi-story-header">
-        <span class="story-tag">DEAR REAL ONE // प्रिय मित्र</span>
-        <h2 class="story-heading">WHY AM I DOING THIS? (SHAURYA'S RANT)</h2>
-      </div>
-      <p class="story-body">
-        Social media feeds are exhausting. Everyone is performing for an algorithm. But I care about the real people in my orbit.
-        I wanted a private, quirky space where you can leave a genuine candid snapshot of who you are right now and a 20-word truth.
-        Years from now, I will unlock this vault and remember the exact moments that made our friendship unforgettable.
-      </p>
-      <div class="story-signature">
-        <span>Yours truly,</span>
-        <strong class="sig-name">Shaurya त्रिपाठी</strong>
-    </section>
-
-    <!-- TRIPATHI'S WALL OF TRUTHS & INSIDE QUOTES -->
-    <section class="wall-of-truths-section">
-      <div class="truths-header">
-        <span class="truths-tag">INSIDE TRUTHS // यारी और बकचोदी</span>
-        <h2 class="truths-title">THE <span class="hindi-font">त्रिपाठी</span> WALL OF REAL TALK</h2>
-        <p class="truths-sub">Guaranteed things that happen when you're in Shaurya's orbit.</p>
-      </div>
-
-      <div class="truths-ticker-grid">
-        <div class="truth-card">
-          <span class="truth-icon">📜</span>
-          <p class="truth-quote">“अगर त्रिपाठी ने यह लिंक भेजा है, तो समझो तुम्हारी दोस्ती कोर्ट में भी गवाही देगी।”</p>
-          <span class="truth-author">— DONE AND DUSTED HAI JI </span>
-        </div>
-
-        <div class="truth-card">
-          <span class="truth-icon">🎧</span>
-          <p class="truth-quote">“Tripathi's vibe check: 80% Spotify , 15% bakchodi , 5% functioning human.”</p>
-          <span class="truth-author">— Genuine baat hai ji.!</span>
-        </div>
-
-        <div class="truth-card">
-          <span class="truth-icon">☕</span>
-          <p class="truth-quote">“शाश्वत नियम: चाय त्रिपाठी पिलाएगा, पर बकचोदी दोनों की 50-50 होगी।”</p>
-          <span class="truth-author">— THE CHAI PROTOCOL</span>
-        </div>
-
-        <div class="truth-card">
-          <span class="truth-icon">🚫</span>
-          <p class="truth-quote">“Bina filter ke aao bhai , no chutiyaps”</p>
-          <span class="truth-author">— Vault ke bhi niyam hote hai mitarr</span>
-        </div>
-
-        <div class="truth-card">
-          <span class="truth-icon">👑</span>
-          <p class="truth-quote">“Friends who are still here till this point of my life , TUSSI genuinely GREAT ho”</p>
-          <span class="truth-author">— GENUINE BAAT HAI </span>
-        </div>
-
-        <div class="truth-card">
-          <span class="truth-icon">⚡</span>
-          <p class="truth-quote">“Tera bhai Tripathi — always a call away, unless phone DND ya silent mode pe ho.(rare case)”</p>
-          <span class="truth-author">— 24/7 HELPLINE (Maybe)</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- VINTAGE DHH CASSETTE & MATTE-BLACK AIRPODS PLAYER -->
-    <section class="dhh-player-section" id="dhhPlayerSection">
-      <div class="player-outer-frame">
-        <div class="player-top-tag">
-          <span class="rec-dot"></span>
-          <span class="rec-label">TRIPATHI FM </span>
-          <span class="player-edition">SEEDHE MAUT • KR$NA • KARMA • WHYSOKAI • IKKA</span>
-        </div>
-
-        <div class="player-deck-header">
-          <h2 class="player-title">THE <span class="hindi-font">त्रिपाठी</span> SOUNDTRACK</h2>
-          <p class="player-desc">Click the cassette or AirPods to drop a random banger.Tagda system hai.</p>
-
-          <!-- PLAYER DEVICE SWITCHER -->
-          <div class="device-switch-tray">
-            <button type="button" class="device-toggle-btn active" id="btnModeCassette">
-              📼 VINTAGE CASSETTE DECK
-            </button>
-            <button type="button" class="device-toggle-btn" id="btnModeAirpods">
-              🎧 MATTE-BLACK AIRPODS CASE
-            </button>
-          </div>
-        </div>
-
-        <!-- DEVICE VIEWPORT 1: VINTAGE CASSETTE DECK -->
-        <div class="cassette-device-stage" id="cassetteStage">
-          <div class="cassette-body" id="cassetteBody" title="Click to Play / Shuffle DHH Track">
-            <div class="cassette-top-edge">
-              <span class="screw top-l"></span>
-              <span class="screw top-r"></span>
-            </div>
-
-            <div class="cassette-label-sticker">
-              <div class="label-header">
-                <span class="cassette-brand">TRIPATHI BC-420</span>
-                <span class="cassette-side">SIDE A • HQ STEREO</span>
-              </div>
-              <div class="label-handwritten-title">
-                <span>DHH Essentials // सीधे मौत • KR$NA • Karma • WhySoKai • Ikka</span>
-              </div>
-            </div>
-
-            <!-- Tape Window with Reels -->
-            <div class="cassette-window">
-              <div class="tape-reel reel-left" id="tapeReelLeft">
-                <div class="reel-cog"></div>
-                <div class="reel-teeth"></div>
-              </div>
-
-              <div class="tape-bridge">
-                <div class="tape-ribbon"></div>
-                <div class="tape-counter" id="tapeCounter">00:00</div>
-              </div>
-
-              <div class="tape-reel reel-right" id="tapeReelRight">
-                <div class="reel-cog"></div>
-                <div class="reel-teeth"></div>
-              </div>
-            </div>
-
-            <div class="cassette-bottom-trapezoid">
-              <span class="screw bot-l"></span>
-              <span class="screw bot-m"></span>
-              <span class="screw bot-r"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- DEVICE VIEWPORT 2: MATTE-BLACK AIRPODS CASE -->
-        <div class="airpods-device-stage hidden" id="airpodsStage">
-          <div class="airpods-case" id="airpodsCase" title="Click to Flip Open / Play">
-            <div class="airpods-lid" id="airpodsLid">
-              <div class="lid-seam"></div>
-            </div>
-            <div class="airpods-body">
-              <div class="airpods-cavity">
-                <div class="earbud bud-left">
-                  <div class="bud-head"></div>
-                  <div class="bud-stem"></div>
-                </div>
-                <div class="earbud bud-right">
-                  <div class="bud-head"></div>
-                  <div class="bud-stem"></div>
-                </div>
-              </div>
-              <div class="case-led-light" id="caseLed"></div>
-              <div class="case-engraving">त्रिपाठी PRO 2</div>
-            </div>
-          </div>
-          <p class="airpods-hint-text">TAP THE CASE TO OPEN</p>
-        </div>
-
-        <!-- LCD MONITOR & EQUALIZER -->
-        <div class="player-hud-panel">
-          <div class="lcd-screen" id="lcdScreen">
-            <div class="lcd-status-line">
-              <span class="lcd-dot"></span>
-              <span class="lcd-status-text" id="lcdStatusText">READY • CLICK CASSETTE TO PLAY</span>
-            </div>
-            <div class="lcd-track-title" id="lcdTrackTitle">“HIT SHUFFLE FOR TRIPATHI'S VIBE”</div>
-            <div class="lcd-artist-name" id="lcdArtistName">SEEDHE MAUT • KR$NA • KARMA • WHYSOKAI • IKKA</div>
+        <div class="relative bg-white border-4 border-black shadow-[8px_8px_0px_#000000] p-4 md:p-8 overflow-hidden">
+          <!-- Background Graphic Hindi Stamp Motif -->
+          <div class="absolute right-4 -bottom-4 opacity-10 pointer-events-none select-none text-[120px] sm:text-[180px] md:text-[220px] font-black font-devanagari leading-none text-pitch-black">
+            त्रिपाठी
           </div>
 
-          <!-- VU-Meter Equalizer Bars -->
-          <div class="equalizer-rack" id="equalizerRack">
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-            <div class="eq-bar"><div class="eq-fill"></div></div>
-          </div>
-        </div>
-
-        <!-- PLAYER MECHANICAL BUTTON CONTROLS -->
-        <div class="player-controls-row">
-          <button type="button" class="btn-audio-primary" id="btnShufflePlay">
-            <span class="play-icon">▶</span>
-            <span id="btnShuffleText">PLAY RANDOM DHH SONG</span>
-          </button>
-          <button type="button" class="btn-audio-aux" id="btnNextTrack" title="Next Random Song">
-            ⏭ NEXT
-          </button>
-          <button type="button" class="btn-audio-aux" id="btnToggleVideo">
-            📺 SHOW VIDEO
-          </button>
-        </div>
-
-        <!-- SEAMLESS EMBEDDED YOUTUBE CONTAINER (NO LOGIN) -->
-        <div class="youtube-player-dock hidden" id="youtubeDock">
-          <div class="dock-header">
-            <span class="dock-title">YOUTUBE DHH STREAM (NO LOGIN NEEDED)</span>
-            <button type="button" class="dock-close-btn" id="closeDockBtn">✕ HIDE VIDEO</button>
-          </div>
-          <div class="iframe-embed-box">
-            <div id="youtubeEmbedTarget"></div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- INTERACTIVE SUBMISSION SUITE -->
-    <section class="booth-card-wrap">
-      <div class="storybook-frame">
-        <div class="frame-stamp-corner corner-tl"></div>
-        <div class="frame-stamp-corner corner-tr"></div>
-        <div class="frame-stamp-corner corner-bl"></div>
-        <div class="frame-stamp-corner corner-br"></div>
-
-        <form id="memoryForm" class="booth-form" onsubmit="return false;">
-          
-          <!-- STEP 1: IDENTITY -->
-          <div class="form-step step-identity">
-            <div class="step-header">
-              <span class="step-num">STEP 01</span>
-              <label for="friendNameInput" class="step-title">WHO ARE YOU TO TRIPATHI?</label>
-              <span class="step-sub">Your real name, nickname, or the inside joke name Shaurya calls you by</span>
-            </div>
-            <div class="input-wrap">
-              <input 
-                type="text" 
-                id="friendNameInput" 
-                name="friendName" 
-                placeholder="e.g. Aarav, Tanya, Chai Partner, Crime Accomplice..." 
-                maxlength="50" 
-                required 
-                autocomplete="off"
-              />
-              <span class="input-focus-border"></span>
-            </div>
-          </div>
-
-          <!-- STEP 2: PHOTOBOOTH STUDIO -->
-          <div class="form-step step-booth">
-            <div class="step-header">
-              <span class="step-num">STEP 02</span>
-              <h2 class="step-title">GIVE SHAURYA YOUR FACE (SNAPSHOT STUDIO)</h2>
-              <span class="step-sub">Take a candid right now or upload a picture from your camera roll</span>
-            </div>
-
-            <!-- BOOTH MODE TABS -->
-            <div class="booth-tabs" role="tablist">
-              <button type="button" class="tab-btn active" id="tabLiveCamera" role="tab" aria-selected="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                📸 LIVE PHOTOBOOTH
-              </button>
-              <button type="button" class="tab-btn" id="tabFileUpload" role="tab" aria-selected="false">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                📁 UPLOAD PHOTO
-              </button>
-            </div>
-
-            <!-- CAMERA VIEWPORT -->
-            <div class="viewport-stage" id="viewportStage">
-              <!-- Live Video Feed -->
-              <div class="camera-stream-box" id="cameraStreamBox">
-                <video id="videoElement" autoplay playsinline muted></video>
-                <div class="viewfinder-grid">
-                  <div class="vf-corner tl"></div>
-                  <div class="vf-corner tr"></div>
-                  <div class="vf-corner bl"></div>
-                  <div class="vf-corner br"></div>
-                  <div class="vf-crosshair">+</div>
-                  <span class="vf-brand-watermark">TRIPATHI CAM // 2026</span>
-                </div>
-                <!-- Shutter countdown banner -->
-                <div class="countdown-overlay" id="countdownOverlay">
-                  <span id="countdownNumber">3</span>
-                  <p class="countdown-hint">SMILE FOR TRIPATHI! 😄</p>
-                </div>
-                <!-- Flash animation overlay -->
-                <div class="shutter-flash" id="shutterFlash"></div>
-              </div>
-
-              <!-- File Upload Dropzone -->
-              <div class="file-dropzone hidden" id="fileDropzone">
-                <input type="file" id="photoFileInput" accept="image/*" class="file-input-hidden" />
-                <div class="dropzone-content">
-                  <div class="dropzone-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#fcbc72" stroke-width="1.8"><path d="M12 2v10m0 0l-3-3m3 3l3-3"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/></svg>
-                  </div>
-                  <p class="dropzone-text">Drag & drop your photo here, or <span class="highlight-underline">browse files</span></p>
-                  <span class="dropzone-note">JPG, PNG, WebP • Keep it raw and genuine!</span>
-                </div>
-              </div>
-
-              <!-- Captured Snapshot Preview Canvas & Decorative Stickers Overlay -->
-              <div class="captured-preview-box hidden" id="capturedPreviewBox">
-                <div class="polaroid-mat" id="polaroidMat">
-                  <div class="polaroid-pin">📍</div>
-                  <div class="polaroid-top-stamp">★ <span class="hindi-font">त्रिपाठी</span> ARCHIVE ★</div>
-                  <img id="capturedImgPreview" alt="Snapshot preview" />
-                  <div class="sticker-canvas-layer" id="stickerCanvasLayer"></div>
-                  <button type="button" class="retake-pill-btn" id="retakeBtn">
-                    ↺ RETAKE PHOTO
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- CAMERA CONTROLS BAR -->
-            <div class="camera-controls-bar" id="cameraControlsBar">
-              <button type="button" class="aux-btn" id="flipCameraBtn" title="Switch front/back camera">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16v4m0 0l-3-3m3 3l3-3M4 8V4m0 0l3 3M4 4L1 7"/></svg>
-                FLIP CAM
-              </button>
-
-              <button type="button" class="shutter-big-btn" id="snapShutterBtn" aria-label="Take Photo">
-                <span class="shutter-inner">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-                </span>
-                <span class="shutter-ring"></span>
-              </button>
-
-              <button type="button" class="aux-btn" id="toggleFlashGridBtn" title="Grid Viewfinder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
-                GRID
-              </button>
-            </div>
-
-            <!-- FILM FILTERS SELECTOR -->
-            <div class="filters-deck">
-              <span class="deck-title">VINTAGE FILM PALETTE:</span>
-              <div class="filter-pills" id="filterPills">
-                <button type="button" class="filter-pill active" data-filter="normal">NATURAL</button>
-                <button type="button" class="filter-pill" data-filter="warm">WARM 90s</button>
-                <button type="button" class="filter-pill" data-filter="golden">GOLDEN HOUR</button>
-                <button type="button" class="filter-pill" data-filter="grain">RETRO GRAIN</button>
-                <button type="button" class="filter-pill" data-filter="cyber">CYBER POP</button>
-                <button type="button" class="filter-pill" data-filter="noir">NOIR B&W</button>
-              </div>
-            </div>
-
-            <!-- PLAYFUL STAMP & STICKER BAR WITH HINDI & FUNKY ACCENTS -->
-            <div class="sticker-bar-wrap" id="stickerBarWrap">
-              <div class="sticker-bar-header">
-                <span class="deck-title">STAMP YOUR PHOTO FOR TRIPATHI:</span>
-                <span class="sticker-hint">(Tap to stick on polaroid, click sticker on photo to remove)</span>
-              </div>
-              <div class="sticker-options" id="stickerOptions">
-                <button type="button" class="sticker-btn sticker-hindi-highlight" data-sticker="⭐ त्रिपाठी">⭐ त्रिपाठी</button>
-                <button type="button" class="sticker-btn" data-sticker="☕ भाई">☕ भाई</button>
-                <button type="button" class="sticker-btn" data-sticker="👑 100% असली">👑 100% असली</button>
-                <button type="button" class="sticker-btn" data-sticker="⚡ CHAOS">⚡ CHAOS</button>
-                <button type="button" class="sticker-btn" data-sticker="💖 BESTIE">💖 BESTIE</button>
-                <button type="button" class="sticker-btn" data-sticker="🔒 SECRET">🔒 SECRET</button>
-                <button type="button" class="sticker-btn" data-sticker="💌 FOREVER">💌 FOREVER</button>
-                <button type="button" class="clear-stickers-btn" id="clearStickersBtn">CLEAR ALL</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- STEP 3: THE 20-WORD WHISPER -->
-          <div class="form-step step-note">
-            <div class="step-header">
-              <span class="step-num">STEP 03</span>
-              <h2 class="step-title">THE 20-WORD WHISPER (बीस शब्दों का पैगाम)</h2>
-              <span class="step-sub">A memory, an inside roast, or an unsaid wish. Strictly 20 words ya usse kamm !</span>
-            </div>
-
-            <div class="postcard-canvas">
-              <div class="postcard-stamp-badge">
-                <span class="stamp-postmark">FIRST CLASS AIRMAIL</span>
-                <div class="stamp-inner-art"><span class="hindi-font">त्रिपाठी</span> • 2026</div>
-              </div>
-
-              <div class="postcard-header-tag">
-                <span>PAR AVION • TO: SHAURYA TRIPATHI</span>
-              </div>
-
-              <div class="textarea-container">
-                <textarea 
-                  id="noteInput" 
-                  name="note" 
-                  rows="3" 
-                  placeholder="Tripathi bhai, remember that 3am chai? You're crazy but you're family. Never change!" 
-                  required
-                ></textarea>
-                
-                <div class="word-counter-tray">
-                  <div class="word-counter-pill" id="wordCountBadge">
-                    <span id="currentWordCount">0</span> / 20 WORDS
-                  </div>
-                  <span class="word-counter-warning hidden" id="wordLimitWarning">
-                    ⚠️ 20 words limit reached! Tripathi's vault enforces brevity.
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- MOOD CLASSIFIER -->
-            <div class="mood-selector-wrap">
-              <span class="deck-title">CHOOSE THE VIBE:</span>
-              <div class="mood-chips" id="moodChips">
-                <label class="mood-chip active">
-                  <input type="radio" name="mood" value="Wholesome" checked />
-                  <span>🌸 WHOLESOME (दिल से)</span>
-                </label>
-                <label class="mood-chip">
-                  <input type="radio" name="mood" value="Late Night" />
-                  <span>🌙 LATE NIGHT VIBES</span>
-                </label>
-                <label class="mood-chip">
-                  <input type="radio" name="mood" value="Pure Chaos" />
-                  <span>⚡ PURE CHAOS (फुल बवाल)</span>
-                </label>
-                <label class="mood-chip">
-                  <input type="radio" name="mood" value="Nostalgic" />
-                  <span>🍂 NOSTALGIC (पुरानी यादें)</span>
-                </label>
-                <label class="mood-chip">
-                  <input type="radio" name="mood" value="Secret" />
-                  <span>🗝️ TOP SECRET (राज़)</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- STEP 4: SUBMISSION ACTION -->
-          <div class="form-submit-stage">
-            <button type="button" class="seal-vault-button" id="submitMemoryBtn">
-              <span class="seal-wax-crest">
-                <span class="wax-seal-hindi">त्रि</span>
+          <!-- Masthead Top Meta Row -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-4 border-black">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2 py-1 bg-retro-pink text-white font-code-snippet text-xs font-black border-2 border-black shadow-[2px_2px_0px_#000000]">
+                VOL. 04 / 2026
               </span>
-              <span class="seal-btn-text">SEAL INTO TRIPATHI'S VAULT</span>
-              <span class="seal-arrow">➔</span>
+              <span class="px-2 py-1 bg-canary-yellow text-black font-code-snippet text-xs font-bold border-2 border-black shadow-[2px_2px_0px_#000000]">
+                FOR TRUSTED COMRADES
+              </span>
+            </div>
+            <button id="mastheadVaultBtn" class="inline-flex items-center gap-2 px-3 py-1 bg-electric-blue text-white border-3 border-black shadow-[4px_4px_0px_#000000] -rotate-2 hover:rotate-0 active:translate-x-1 active:translate-y-1 transition-all cursor-pointer font-headline-sm text-sm font-black uppercase">
+              <span>त्रिपाठी'S KEY</span>
+              <span class="text-lg">🗝️</span>
             </button>
-            <p class="seal-privacy-notice">
-              🔒 Encrypted directly to Shaurya Tripathi's vault. Only Tripathi's secret key can open it.
+          </div>
+
+          <!-- Main Clean Headline -->
+          <div class="py-4">
+            <h1 class="font-display-hero text-[40px] sm:text-[64px] md:text-[80px] leading-tight text-pitch-black tracking-tight font-black uppercase flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span class="bg-canary-yellow px-4 py-1 border-4 border-black shadow-[6px_6px_0px_#000000] -rotate-2 text-black inline-block font-devanagari">
+                त्रिपाठी's
+              </span>
+              <span class="text-electric-blue tracking-tighter">ARCHIVE</span>
+              <span class="text-xs sm:text-sm font-code-snippet px-3 py-1 bg-retro-pink text-white border-2 border-black rotate-3 uppercase font-bold self-start mt-2 shadow-[3px_3px_0px_#000000]">
+                UNCURATED &amp; RAW
+              </span>
+            </h1>
+            <p class="font-body-md text-sm md:text-base text-pitch-black mt-2 max-w-2xl font-bold">
+              No corporate smiles. Zero PR filtering. Strictly chai-tapri energy with the inner circle.
             </p>
           </div>
+        </div>
+      </section>
 
-        </form>
+      <!-- SECTION 2: Shaurya’s Low-Text Manifesto & Code of Conduct + Pink Cassette -->
+      <section id="cassetteSection" class="w-full mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Short & Punchy Personal Rant (7 cols) -->
+          <div class="lg:col-span-7 relative bg-canary-yellow border-4 border-black shadow-[8px_8px_0px_#000000] p-4 md:p-6">
+            <div class="absolute -top-3 left-10 w-24 h-6 bg-retro-pink -rotate-3 border-2 border-black shadow-[2px_2px_0px_#000000] pointer-events-none"></div>
+
+            <div class="flex items-center justify-between border-b-4 border-black pb-3 mb-4">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-1 bg-pitch-black text-white font-code-snippet text-xs font-bold border-2 border-black">DISPATCH #01</span>
+                <h2 class="font-headline-lg text-[22px] md:text-[26px] text-pitch-black uppercase font-black flex items-center gap-1">
+                  SHAURYA'S RANT <span class="text-retro-pink font-devanagari">/ सुनो बे</span>
+                </h2>
+              </div>
+              <span class="material-symbols-outlined text-pitch-black text-[30px]">campaign</span>
+            </div>
+
+            <div class="bg-white border-3 border-black p-4 shadow-[4px_4px_0px_#000000] mb-4">
+              <p class="font-headline-md text-[18px] md:text-[20px] leading-snug text-pitch-black font-black uppercase">
+                "Instagram is fake. This is our uncurated mess. Chai, midnight rants, and 2 AM truths."
+              </p>
+              <p class="font-body-md text-xs md:text-sm text-pitch-black mt-2 font-bold leading-relaxed">
+                If you have a key to this sanctuary, you are family. Snap your candid face, drop a maximum 20-word whisper, and lock it forever.
+              </p>
+            </div>
+
+            <div class="pt-1 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2 font-code-snippet text-xs font-bold text-pitch-black bg-white px-3 py-1.5 border-2 border-black shadow-[2px_2px_0px_#000000]">
+                <span class="material-symbols-outlined text-[16px] text-electric-blue">fingerprint</span>
+                <span>SHAURYA TRIPATHI // VARANASI &amp; BLR</span>
+              </div>
+              <div class="px-3 py-1 bg-retro-pink text-white font-headline-sm text-xs font-black uppercase border-3 border-black shadow-[3px_3px_0px_#000000] -rotate-3">
+                ★ 100% SEALED ★
+              </div>
+            </div>
+          </div>
+
+          <!-- Condensed Rules + Retro Pink/Electric Blue Cassette (5 cols) -->
+          <div class="lg:col-span-5 flex flex-col gap-4">
+            
+            <!-- Code of Conduct -->
+            <div class="bg-white border-4 border-black shadow-[6px_6px_0px_#000000] p-4">
+              <div class="flex items-center justify-between border-b-3 border-black pb-2 mb-3 bg-electric-blue text-white p-2 border-2 shadow-[2px_2px_0px_#000000]">
+                <span class="font-headline-sm text-xs md:text-sm uppercase font-black">VAULT CODE OF CONDUCT</span>
+                <span class="material-symbols-outlined text-[18px]">verified_user</span>
+              </div>
+              <ul class="font-headline-sm text-xs uppercase font-extrabold space-y-2 text-pitch-black">
+                <li class="flex items-center gap-2 bg-[#FEFCE8] p-2 border-2 border-black shadow-[2px_2px_0px_#000000]">
+                  <span class="px-1.5 bg-retro-pink text-white font-code-snippet text-xs">01</span>
+                  <span>Never forward vault drops to public feeds.</span>
+                </li>
+                <li class="flex items-center gap-2 bg-[#FEFCE8] p-2 border-2 border-black shadow-[2px_2px_0px_#000000]">
+                  <span class="px-1.5 bg-canary-yellow text-black font-code-snippet text-xs">02</span>
+                  <span>20-word cap on notes. Brevity breeds truth.</span>
+                </li>
+                <li class="flex items-center gap-2 bg-[#FEFCE8] p-2 border-2 border-black shadow-[2px_2px_0px_#000000]">
+                  <span class="px-1.5 bg-electric-blue text-white font-code-snippet text-xs">03</span>
+                  <span>Chai debt never expires; pay it forward.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Lo-Fi Retro Pink & Electric Blue Cassette Widget -->
+            <div class="relative bg-retro-pink border-4 border-black shadow-[6px_6px_0px_#000000] p-4 rotate-1 text-white">
+              <div class="flex items-center justify-between border-b-3 border-black pb-2 mb-3">
+                <div class="flex items-center gap-1.5 font-headline-sm text-xs uppercase font-black">
+                  <span class="material-symbols-outlined text-canary-yellow text-[18px]">radio</span>
+                  <span>MERE PASANDIDA GAANE</span>
+                </div>
+                <span id="cassetteRecBadge" class="px-2 py-0.5 bg-canary-yellow text-black font-code-snippet text-[10px] uppercase font-black border-2 border-black animate-pulse">
+                  REC ON
+                </span>
+              </div>
+
+              <!-- Cassette Shell Graphic -->
+              <div class="bg-pitch-black p-3 rounded-md border-3 border-black shadow-inner">
+                <div class="bg-canary-yellow p-1.5 border-2 border-black mb-3 flex flex-col items-center text-pitch-black">
+                  <span class="font-code-snippet text-[9px] font-black tracking-widest uppercase">DESI HIP-HOP MIXTAPE</span>
+                  <span id="currentTrackTitle" class="font-headline-sm text-[12px] font-black truncate max-w-full">
+                    Seedhe Maut • KR$NA • Prabh Deep
+                  </span>
+                </div>
+
+                <!-- Tape Window with Rotating Spools -->
+                <div class="bg-white h-12 rounded border-2 border-black flex items-center justify-around px-4 relative overflow-hidden">
+                  <div id="spoolLeft" class="w-7 h-7 rounded-full border-4 border-dashed border-pitch-black flex items-center justify-center transition-all">
+                    <div class="w-2 h-2 rounded-full bg-pitch-black"></div>
+                  </div>
+                  <div class="w-16 h-3 bg-retro-pink rounded border border-black flex items-center justify-center text-[8px] font-code-snippet text-white font-bold" id="tapeCounter">
+                    00:00
+                  </div>
+                  <div id="spoolRight" class="w-7 h-7 rounded-full border-4 border-dashed border-pitch-black flex items-center justify-center transition-all">
+                    <div class="w-2 h-2 rounded-full bg-pitch-black"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="mt-3 flex items-center justify-between gap-2">
+                <button id="cassettePlayBtn" class="flex-1 px-3 py-1.5 bg-electric-blue text-white font-headline-sm text-xs uppercase border-3 border-black shadow-[3px_3px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center gap-1 font-black">
+                  <span class="material-symbols-outlined text-[16px]" id="playIcon">play_arrow</span>
+                  <span id="playBtnText">PLAY TAPE</span>
+                </button>
+                <button id="cassetteNextBtn" class="px-2.5 py-1.5 bg-white text-black font-headline-sm text-xs uppercase border-3 border-black shadow-[3px_3px_0px_#000000] hover:bg-canary-yellow active:translate-x-1 active:translate-y-1 font-black" title="Next Banger">
+                  ⏭️ NEXT
+                </button>
+                <div class="flex items-center gap-1 px-2 py-1 bg-white text-black border-2 border-black shadow-[2px_2px_0px_#000000]">
+                  <span class="font-code-snippet text-[10px] font-bold">VU:</span>
+                  <div class="flex items-end gap-1 h-3.5">
+                    <div class="eq-bar w-1 bg-canary-yellow h-2"></div>
+                    <div class="eq-bar w-1 bg-electric-blue h-3"></div>
+                    <div class="eq-bar w-1 bg-retro-pink h-3.5"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Collapsible Mini Video Player Dock -->
+              <div id="youtubeDock" class="hidden mt-3 p-2 bg-pitch-black border-2 border-black rounded text-center">
+                <div class="flex justify-between items-center mb-1 text-[10px] font-code-snippet text-canary-yellow">
+                  <span>YOUTUBE AUDIO STREAM</span>
+                  <button id="closeDockBtn" class="text-white hover:text-retro-pink font-bold">✕ CLOSE</button>
+                </div>
+                <div id="youtubeEmbedTarget" class="w-full aspect-video rounded overflow-hidden"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: The "Real Talk" Neo-Brutalist Marquee Ticker -->
+      <section class="w-full my-4 overflow-hidden bg-electric-blue border-y-4 border-black py-2 shadow-[5px_5px_0px_#000000] -rotate-0.5">
+        <div class="flex items-center gap-4 whitespace-nowrap overflow-x-hidden select-none">
+          <div class="animate-marquee flex items-center gap-4">
+            <span class="px-3 py-1 bg-canary-yellow text-black border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              ☕ चाय AND BAKCHODI is non-negotiable
+            </span>
+            <span class="px-3 py-1 bg-retro-pink text-white border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              NON FILTER PERSONS ONLI
+            </span>
+            <span class="px-3 py-1 bg-white text-pitch-black border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              ⚡ No SANSKARI PEOPLE ALLOWED
+            </span>
+            <span class="px-3 py-1 bg-canary-yellow text-black border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              🌙 Late-night archives only
+            </span>
+            <span class="px-3 py-1 bg-retro-pink text-white border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              🔥 Bakchodi quota: Unlimited
+            </span>
+            <span class="px-3 py-1 bg-white text-pitch-black border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              🗝️ Sanstha ki maryada rakhein
+            </span>
+            <!-- Duplicate for infinite seamless scroll -->
+            <span class="px-3 py-1 bg-canary-yellow text-black border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              ☕ चाय AND BAKCHODI is non-negotiable
+            </span>
+            <span class="px-3 py-1 bg-retro-pink text-white border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              NON FILTER PERSONS ONLI
+            </span>
+            <span class="px-3 py-1 bg-white text-pitch-black border-3 border-black font-headline-sm text-xs uppercase font-black shadow-[3px_3px_0px_#000000]">
+              ⚡ No SANSKARI PEOPLE ALLOWED
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4 & 5: High-Contrast Photobooth + 20-Word Yellow/Pink Postcard -->
+      <section id="kioskSection" class="w-full my-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Retro Photobooth Kiosk with Electric Blue / Hot Pink Chassis (7 cols) -->
+          <div class="lg:col-span-7 bg-white border-4 border-black shadow-[8px_8px_0px_#000000] p-4 md:p-6 relative">
+            
+            <!-- Nameplate Banner -->
+            <div class="bg-electric-blue text-white p-3 border-3 border-black mb-4 flex flex-wrap items-center justify-between gap-2 shadow-[4px_4px_0px_#000000]">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 rounded-full bg-canary-yellow animate-ping border border-black"></span>
+                <span class="font-headline-sm text-sm md:text-base tracking-wider uppercase font-black">
+                  RETRO PHOTO KIOSK BC-II
+                </span>
+              </div>
+              <span class="font-code-snippet text-xs bg-canary-yellow text-black px-2 py-0.5 border-2 border-black uppercase font-black shadow-[2px_2px_0px_#000000]">
+                [REC •]
+              </span>
+            </div>
+
+            <!-- 4:3 Camera Viewfinder Screen / Interactive Drop Zone -->
+            <div id="photobooth-dropzone" class="relative w-full aspect-[4/3] bg-pitch-black border-4 border-black overflow-hidden group shadow-[5px_5px_0px_#000000] select-none transition-all duration-200">
+              
+              <!-- Viewfinder Crosshairs Overlay -->
+              <div class="absolute inset-0 pointer-events-none z-10 p-4 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                  <div class="w-7 h-7 border-t-4 border-l-4 border-canary-yellow"></div>
+                  <div class="px-2 py-0.5 bg-retro-pink text-white font-code-snippet text-xs font-black tracking-widest uppercase border-2 border-black shadow-[2px_2px_0px_#000000]">
+                    ISO 800 // 35MM
+                  </div>
+                  <div class="w-7 h-7 border-t-4 border-r-4 border-canary-yellow"></div>
+                </div>
+                <div class="flex justify-center items-center">
+                  <div class="w-14 h-14 border-2 border-dashed border-canary-yellow rounded-full flex items-center justify-center">
+                    <div class="w-2 h-2 bg-retro-pink rounded-full"></div>
+                  </div>
+                </div>
+                <div class="flex justify-between items-end">
+                  <div class="w-7 h-7 border-b-4 border-l-4 border-canary-yellow"></div>
+                  <div class="font-code-snippet text-xs text-canary-yellow bg-pitch-black/80 px-2 py-0.5 border border-canary-yellow font-black uppercase">
+                    FRAME: 24/36 RAW
+                  </div>
+                  <div class="w-7 h-7 border-b-4 border-r-4 border-canary-yellow"></div>
+                </div>
+              </div>
+
+              <!-- White Shutter Flash Layer -->
+              <div id="cameraFlashOverlay" class="flash-effect"></div>
+
+              <!-- Shutter Status Toast / Alert Banner -->
+              <div id="kioskToast" class="absolute top-3 left-1/2 -translate-x-1/2 z-30 px-3 py-1 bg-canary-yellow text-black font-headline-sm text-xs font-black uppercase border-2 border-black shadow-[3px_3px_0px_#000] hidden whitespace-nowrap text-center max-w-[90%]">
+                ✓ SNAP CAPTURED!
+              </div>
+
+              <!-- Countdown Number Overlay -->
+              <div id="countdownBox" class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none hidden">
+                <span id="countdownNumber" class="text-7xl md:text-9xl font-black font-headline-lg text-canary-yellow drop-shadow-[4px_4px_0px_#000000] animate-bounce">
+                  3
+                </span>
+              </div>
+
+              <!-- Live Video Element (Webcam Stream) -->
+              <video id="cameraVideo" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+
+              <!-- Photo Preview Image Element -->
+              <img id="kioskImagePreview" class="w-full h-full object-cover filter contrast-110 brightness-95 transition-all duration-300 pointer-events-none select-none" src="uploads/chai_tapri.jpg" alt="Photo Preview">
+
+              <!-- Interactive Placed Stickers Layer -->
+              <div id="placedStickersLayer" class="absolute inset-0 z-20 overflow-hidden pointer-events-none">
+                <!-- Pre-populated Default Stickers -->
+                <div class="placed-sticker absolute pointer-events-auto cursor-grab active:cursor-grabbing select-none group/sticker flex items-center gap-1.5 px-3 py-1 bg-canary-yellow border-3 border-black font-headline-sm text-[16px] text-pitch-black font-black shadow-[4px_4px_0px_#000000]" data-bg="bg-canary-yellow" data-color="text-pitch-black" style="bottom: 24px; left: 24px; transform: rotate(-6deg);">
+                  <span>☕ भाई</span>
+                  <button type="button" class="remove-sticker-btn opacity-0 group-hover/sticker:opacity-100 transition-opacity ml-1 w-4 h-4 bg-retro-pink text-white rounded-full flex items-center justify-center text-[10px] font-black leading-none hover:scale-110" title="Remove sticker">×</button>
+                </div>
+                <div class="placed-sticker absolute pointer-events-auto cursor-grab active:cursor-grabbing select-none group/sticker flex items-center gap-1.5 px-2.5 py-1 bg-retro-pink text-white border-3 border-black font-headline-sm text-[14px] font-black shadow-[3px_3px_0px_#000000]" data-bg="bg-retro-pink text-white" data-color="text-white" style="top: 36px; right: 30px; transform: rotate(10deg);">
+                  <span>⚡ CHAOS</span>
+                  <button type="button" class="remove-sticker-btn opacity-0 group-hover/sticker:opacity-100 transition-opacity ml-1 w-4 h-4 bg-canary-yellow text-black rounded-full flex items-center justify-center text-[10px] font-black leading-none hover:scale-110" title="Remove sticker">×</button>
+                </div>
+              </div>
+
+              <!-- Drop Indicator Overlay -->
+              <div id="dropIndicator" class="absolute inset-0 pointer-events-none z-15 bg-retro-pink/20 border-4 border-dashed border-retro-pink items-center justify-center hidden">
+                <span class="px-4 py-2 bg-canary-yellow text-black font-headline-sm text-sm uppercase shadow-[4px_4px_0px_#000000] border-3 border-black tracking-wider font-black">
+                  ⚡ RELEASE TO SLAP STICKER
+                </span>
+              </div>
+            </div>
+
+            <!-- Controls Toolbar -->
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-2 border-t-3 border-black pt-3">
+              <!-- Mode Buttons -->
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button id="modeLiveBtn" class="px-3 py-1.5 bg-electric-blue text-white font-headline-sm text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000000] font-black active:translate-x-0.5 active:translate-y-0.5">
+                  [● Live Camera]
+                </button>
+                <button id="modeUploadBtn" class="px-3 py-1.5 bg-white text-pitch-black font-headline-sm text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow font-black active:translate-x-0.5 active:translate-y-0.5">
+                  [📁 Upload Photo]
+                </button>
+                <button id="retakePhotoBtn" class="px-2.5 py-1.5 bg-white text-pitch-black font-headline-sm text-xs uppercase border-2 border-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow font-black active:translate-x-0.5 active:translate-y-0.5" title="Restart camera">
+                  [↺ Retake]
+                </button>
+                <input type="file" id="photoFileInput" accept="image/*" class="hidden">
+                <button id="clearStickersBtn" class="px-2.5 py-1.5 bg-white text-retro-pink font-code-snippet text-xs font-black uppercase border-2 border-black shadow-[2px_2px_0px_#000000] hover:bg-retro-pink hover:text-white transition-colors flex items-center gap-1" title="Clear all stickers">
+                  <span class="material-symbols-outlined text-[14px]">delete_sweep</span>
+                  <span>Clear</span>
+                </button>
+              </div>
+
+              <!-- Hot Pink Shutter Button -->
+              <button id="shutterBtn" class="group relative px-5 py-2.5 bg-retro-pink text-white font-headline-sm text-sm uppercase border-3 border-black shadow-[4px_4px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2 font-black cursor-pointer">
+                <span class="w-3 h-3 rounded-full bg-canary-yellow animate-ping"></span>
+                <span>SNAP 📸</span>
+              </button>
+            </div>
+
+            <!-- Quick Candid Presets Row -->
+            <div class="mt-2.5 flex flex-wrap items-center gap-1.5 text-xs font-code-snippet font-black bg-[#FEFCE8] p-2 border-2 border-black">
+              <span class="text-pitch-black uppercase text-[11px] mr-1">QUICK CANDIDS:</span>
+              <button type="button" class="preset-candid-btn px-2.5 py-1 bg-white border border-black shadow-[1px_1px_0px_#000] hover:bg-canary-yellow active:translate-y-0.5 font-bold" data-src="uploads/chai_tapri.jpg">☕ Pappu Chai</button>
+              <button type="button" class="preset-candid-btn px-2.5 py-1 bg-white border border-black shadow-[1px_1px_0px_#000] hover:bg-canary-yellow active:translate-y-0.5 font-bold" data-src="uploads/night_terrace.jpg">✨ Night Terrace</button>
+              <button type="button" class="preset-candid-btn px-2.5 py-1 bg-white border border-black shadow-[1px_1px_0px_#000] hover:bg-canary-yellow active:translate-y-0.5 font-bold" data-src="uploads/demo_friend_1.jpg">🍂 Golden Hour</button>
+            </div>
+
+            <!-- Filter Presets Row -->
+            <div class="mt-2.5 flex flex-wrap items-center gap-2">
+              <span class="font-code-snippet text-xs font-black text-pitch-black uppercase">FILTERS:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button class="filter-btn px-2.5 py-1 bg-canary-yellow border-2 border-black font-code-snippet text-xs font-black text-black shadow-[2px_2px_0px_#000000]" data-filter="none">
+                  [Original]
+                </button>
+                <button class="filter-btn px-2.5 py-1 bg-white border-2 border-black font-code-snippet text-xs font-black text-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow" data-filter="grayscale contrast-125">
+                  [Noir 90s]
+                </button>
+                <button class="filter-btn px-2.5 py-1 bg-white border-2 border-black font-code-snippet text-xs font-black text-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow" data-filter="sepia hue-rotate-15 saturate-150">
+                  [Warm 35mm]
+                </button>
+                <button class="filter-btn px-2.5 py-1 bg-white border-2 border-black font-code-snippet text-xs font-black text-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow" data-filter="hue-rotate-90 saturate-200">
+                  [Cyberpunk]
+                </button>
+              </div>
+            </div>
+
+            <!-- Desi Sticker Tray -->
+            <div class="mt-4 bg-white p-3 border-3 border-black shadow-[4px_4px_0px_#000000]">
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-2">
+                <span class="font-headline-sm text-xs text-black uppercase font-black">
+                  ⚡ DESI STICKER DOCK
+                </span>
+                <span class="px-2 py-0.5 bg-canary-yellow border-2 border-black font-code-snippet text-[10px] text-black font-black uppercase">
+                  DRAG OR CLICK TO SLAP
+                </span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2" id="stickerTray">
+                <button class="sticker-chip px-3 py-1.5 bg-canary-yellow text-black border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#000000] active:translate-y-0.5 -rotate-2 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-canary-yellow" data-color="text-pitch-black" data-text="☕ भाई" draggable="true" type="button">
+                  ☕ भाई
+                </button>
+                <button class="sticker-chip px-3 py-1.5 bg-retro-pink text-white border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#000000] active:translate-y-0.5 rotate-3 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-retro-pink text-white" data-color="text-white" data-text="BAKCHODI" draggable="true" type="button">
+                  BAKCHODI
+                </button>
+                <button class="sticker-chip px-3 py-1.5 bg-electric-blue text-white border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#000000] active:translate-y-0.5 -rotate-1 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-electric-blue text-white" data-color="text-white" data-text="⚡ CHAOS" draggable="true" type="button">
+                  ⚡ CHAOS
+                </button>
+                <button class="sticker-chip px-3 py-1.5 bg-pitch-black text-canary-yellow border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#EC4899] active:translate-y-0.5 rotate-2 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-pitch-black text-canary-yellow" data-color="text-canary-yellow" data-text="🌙 3 AM" draggable="true" type="button">
+                  🌙 3 AM
+                </button>
+                <button class="sticker-chip px-3 py-1.5 bg-retro-pink text-white border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#000000] active:translate-y-0.5 -rotate-3 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-retro-pink text-white" data-color="text-white" data-text="❤️ दिल" draggable="true" type="button">
+                  ❤️ दिल
+                </button>
+                <button class="sticker-chip px-3 py-1.5 bg-canary-yellow text-black border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#000000] active:translate-y-0.5 rotate-1 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-canary-yellow text-black" data-color="text-black" data-text="🔥 कटिंग चाय" draggable="true" type="button">
+                  🔥 कटिंग चाय
+                </button>
+                <button class="sticker-chip px-3 py-1.5 bg-white text-black border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#000000] active:translate-y-0.5 -rotate-2 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-white text-black" data-color="text-black" data-text="IYKYK" draggable="true" type="button">
+                  IYKYK
+                </button>
+                <button class="sticker-chip px-3 py-1.5 bg-retro-pink text-white border-2 border-black font-headline-sm text-xs font-black shadow-[3px_3px_0px_#000000] active:translate-y-0.5 rotate-2 hover:rotate-0 transition-transform cursor-grab active:cursor-grabbing select-none" data-bg="bg-retro-pink text-white" data-color="text-white" data-text="★ VIP ★" draggable="true" type="button">
+                  ★ VIP ★
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- The 20-Word Typewriter Postcard in Vivid Canary Yellow (5 cols) -->
+          <div class="lg:col-span-5 relative">
+            <div class="absolute -top-3 -left-2 w-28 h-6 bg-pitch-black -rotate-12 border border-white z-20 pointer-events-none shadow-[2px_2px_0px_#EC4899]"></div>
+            <div class="absolute -bottom-3 -right-2 w-28 h-6 bg-retro-pink rotate-12 border-2 border-black z-20 pointer-events-none shadow-[2px_2px_0px_#000000]"></div>
+
+            <div class="bg-canary-yellow border-4 border-black shadow-[8px_8px_0px_#000000] p-4 md:p-6 rotate-1">
+              
+              <!-- Postcard Header with India Post Stamp -->
+              <div class="flex items-start justify-between border-b-3 border-black pb-3 mb-4">
+                <div>
+                  <span class="font-code-snippet text-xs font-black text-electric-blue uppercase block">
+                    POST CARD / खुला खत
+                  </span>
+                  <h3 class="font-headline-lg text-[20px] md:text-[22px] text-pitch-black uppercase font-black">
+                    20-WORD DISPATCH
+                  </h3>
+                </div>
+                <!-- Postage Stamp Mockup -->
+                <div class="w-16 h-20 bg-white border-2 border-dashed border-retro-pink p-1 flex flex-col items-center justify-between text-center -rotate-3 shadow-[3px_3px_0px_#000000]">
+                  <span class="font-code-snippet text-[8px] text-retro-pink font-black uppercase leading-none">INDIA POST</span>
+                  <span class="material-symbols-outlined text-retro-pink text-[22px]">local_cafe</span>
+                  <span class="font-headline-sm text-[10px] text-retro-pink font-black leading-none">₹ 5.00</span>
+                </div>
+              </div>
+
+              <!-- Form Fields -->
+              <form id="vaultDispatchForm" class="space-y-4">
+                <!-- Name / Alias Input -->
+                <div>
+                  <label for="aliasInput" class="block font-headline-sm text-xs text-pitch-black uppercase font-black mb-1">
+                    Your Name / Alias:
+                  </label>
+                  <div class="relative">
+                    <input type="text" id="aliasInput" required placeholder="e.g. Falana Dhimkana, Bablu, etc." class="w-full bg-white border-3 border-black px-3 py-2 font-body-md text-sm text-black placeholder:text-gray-500 focus:outline-none focus:shadow-[4px_4px_0px_#2563EB] transition-all font-bold">
+                    <span class="material-symbols-outlined absolute right-3 top-2.5 text-black text-[18px]">edit</span>
+                  </div>
+                </div>
+
+                <!-- Mood Selector -->
+                <div>
+                  <label class="block font-headline-sm text-xs text-pitch-black uppercase font-black mb-1">
+                    Select Mood:
+                  </label>
+                  <div class="grid grid-cols-2 gap-2" id="moodSelector">
+                    <button type="button" class="mood-btn px-2 py-1.5 border-2 border-black font-headline-sm text-xs font-black text-left shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 bg-pitch-black text-white" data-mood="Bakchodi">
+                      <span>BAKCHODI 🔥</span>
+                    </button>
+                    <button type="button" class="mood-btn px-2 py-1.5 border-2 border-black font-headline-sm text-xs font-black text-left shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 bg-white text-black" data-mood="Chai & Rant">
+                      <span>CHAI &amp; RANT ☕</span>
+                    </button>
+                    <button type="button" class="mood-btn px-2 py-1.5 border-2 border-black font-headline-sm text-xs font-black text-left shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 bg-white text-black" data-mood="Nostalgia">
+                      <span>NOSTALGIA 📼</span>
+                    </button>
+                    <button type="button" class="mood-btn px-2 py-1.5 border-2 border-black font-headline-sm text-xs font-black text-left shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 bg-white text-black" data-mood="Sirius Talk">
+                      <span>SIRIUS TALK 🗝️</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Monospace Typewriter Textarea with 20-word counter -->
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="postcardMessage" class="font-headline-sm text-xs text-pitch-black uppercase font-black">
+                      Unfiltered Message:
+                    </label>
+                    <span id="wordCounterBadge" class="font-code-snippet text-xs px-2 py-0.5 bg-pitch-black text-white border-2 border-black font-black">
+                      0 / 20 WORDS
+                    </span>
+                  </div>
+                  <div class="relative bg-white border-3 border-black p-2 shadow-[4px_4px_0px_#000000]">
+                    <textarea id="postcardMessage" required rows="3" placeholder="Drop the raw truth or a memory from 2am chai... Strictly 20 words max!" class="w-full bg-transparent font-code-snippet text-xs text-black resize-none focus:outline-none leading-relaxed font-bold"></textarea>
+                    <div id="wordLimitWarning" class="hidden mt-1 p-1 bg-retro-pink text-white font-code-snippet text-[10px] font-black border border-black">
+                      [STRICT 20-WORD LIMIT: CUT THE FILLER]
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-1">
+                  <button type="submit" id="submitPostcardBtn" class="w-full py-3 bg-pitch-black text-canary-yellow font-headline-sm text-sm uppercase border-3 border-black shadow-[5px_5px_0px_#EC4899] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_#EC4899] active:translate-x-2 active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-2 font-black tracking-wider">
+                    <span>STAMP &amp; SEAL IN VAULT 📮</span>
+                  </button>
+                </div>
+              </form>
+
+              <!-- Post-Submission Receipt State -->
+              <div id="submissionReceipt" class="hidden mt-4 p-4 bg-white border-3 border-black shadow-[4px_4px_0px_#000000] relative overflow-hidden">
+                <div class="flex items-start justify-between border-b-2 border-black pb-2 mb-2">
+                  <div>
+                    <span class="font-code-snippet text-xs text-retro-pink font-black uppercase">DISPATCH SECURED</span>
+                    <div class="font-headline-sm text-sm text-pitch-black uppercase font-black">DELIVERED TO TRIPATHI</div>
+                  </div>
+                  <div class="w-10 h-10 rounded-full bg-retro-pink text-white flex items-center justify-center font-black text-xs shadow-sm -rotate-6 border-2 border-black">
+                    SEALED
+                  </div>
+                </div>
+                <p class="font-body-sm text-xs text-black mb-2 font-bold">
+                  Memory encoded: <span id="receiptMemoryId" class="font-code-snippet font-black text-electric-blue">#VAULT-NEW</span>.
+                </p>
+                <div class="px-2 py-1 bg-canary-yellow border-2 border-black font-code-snippet text-xs text-black font-black flex items-center justify-between">
+                  <span>STATUS: STORED IN VAULT 🗝️</span>
+                  <button type="button" id="resetPostcardBtn" class="text-xs underline font-black hover:text-retro-pink">SEND ANOTHER</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 6: "The Hall of Bakchodi" (Bento Collage of Cards) -->
+      <section class="w-full my-8">
+        <div class="flex items-center justify-between border-b-4 border-black pb-2 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 bg-retro-pink text-white font-code-snippet text-xs font-black border-2 border-black">
+              DISPATCH #03
+            </span>
+            <h2 class="font-headline-lg text-xl md:text-2xl text-pitch-black uppercase font-black">
+              THE HALL OF BAKCHODI &amp; GANG LORE
+            </h2>
+          </div>
+          <span class="hidden sm:inline-block font-code-snippet text-xs text-pitch-black/70 font-bold">
+            UNCENSORED ARCHIVE
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Card 1: Electric Blue Header / Warm White Body -->
+          <div class="bg-white border-4 border-black shadow-[6px_6px_0px_#000000] p-4 flex flex-col justify-between">
+            <div>
+              <div class="bg-electric-blue text-white p-2 border-2 border-black shadow-[3px_3px_0px_#000000] mb-3 flex items-center justify-between">
+                <span class="font-headline-sm text-xs uppercase font-black">UNFILTERED GANG QUOTES</span>
+                <span class="material-symbols-outlined text-[16px]">format_quote</span>
+              </div>
+              <div class="p-3 bg-[#FEFCE8] border-2 border-black min-h-[110px] flex items-center justify-center text-center">
+                <p id="quoteTickerText" class="font-headline-md text-sm md:text-base font-black uppercase text-pitch-black leading-snug">
+                  "Bhai bas 5 minute mein nikal raha hoon." <br><span class="text-xs font-normal text-retro-pink font-code-snippet">(still sleeping in bed)</span>
+                </p>
+              </div>
+            </div>
+            <div class="mt-4 pt-2 border-t-2 border-black flex items-center justify-between">
+              <span class="font-code-snippet text-[10px] font-bold text-gray-600">VERIFIED INNER CIRCLE LORE</span>
+              <button id="nextQuoteBtn" class="px-2 py-1 bg-canary-yellow text-black border-2 border-black font-headline-sm text-xs font-black shadow-[2px_2px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5">
+                SHUFFLE 🔀
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: Hot Pink Header / Photo Strip Card -->
+          <div class="bg-white border-4 border-black shadow-[6px_6px_0px_#000000] p-4 flex flex-col justify-between">
+            <div>
+              <div class="bg-retro-pink text-white p-2 border-2 border-black shadow-[3px_3px_0px_#000000] mb-3 flex items-center justify-between">
+                <span class="font-headline-sm text-xs uppercase font-black">35MM MEMORY STRIP</span>
+                <span class="material-symbols-outlined text-[16px]">photo_camera</span>
+              </div>
+              <!-- Vertical 3-frame mini photo strip -->
+              <div class="bg-pitch-black p-2 border-2 border-black flex gap-2 overflow-x-auto">
+                <div class="flex-1 min-w-[70px] bg-white border border-black p-1 text-center">
+                  <div class="h-16 bg-[#FACC15]/20 border border-black flex items-center justify-center font-code-snippet text-[10px] font-black">
+                    ☕ 2 AM CHAI
+                  </div>
+                  <span class="font-code-snippet text-[8px] font-bold block mt-0.5">ASSI GHAT</span>
+                </div>
+                <div class="flex-1 min-w-[70px] bg-white border border-black p-1 text-center">
+                  <div class="h-16 bg-[#EC4899]/20 border border-black flex items-center justify-center font-code-snippet text-[10px] font-black">
+                    🏍️ 80 SPEED
+                  </div>
+                  <span class="font-code-snippet text-[8px] font-bold block mt-0.5">BLR ROADS</span>
+                </div>
+                <div class="flex-1 min-w-[70px] bg-white border border-black p-1 text-center">
+                  <div class="h-16 bg-[#2563EB]/20 border border-black flex items-center justify-center font-code-snippet text-[10px] font-black">
+                    🍕 4 AM ORDER
+                  </div>
+                  <span class="font-code-snippet text-[8px] font-bold block mt-0.5">THE HOSTEL</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 pt-2 border-t-2 border-black flex items-center justify-between">
+              <span class="font-code-snippet text-[10px] font-bold">FILM ROLL: #2026-RAW</span>
+              <span class="px-2 py-0.5 bg-canary-yellow text-black border border-black text-[10px] font-black font-code-snippet">UNFILTERED</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Canary Yellow Telegram Card -->
+          <div class="bg-canary-yellow border-4 border-black shadow-[6px_6px_0px_#000000] p-4 flex flex-col justify-between">
+            <div>
+              <div class="bg-pitch-black text-canary-yellow p-2 border-2 border-black shadow-[3px_3px_0px_#000000] mb-3 flex items-center justify-between">
+                <span class="font-headline-sm text-xs uppercase font-black">CHAI DEBT &amp; METRICS</span>
+                <span class="material-symbols-outlined text-[16px]">receipt_long</span>
+              </div>
+              <ul class="space-y-2 font-headline-sm text-xs uppercase font-black">
+                <li class="flex items-center justify-between bg-white p-2 border-2 border-black shadow-[2px_2px_0px_#000000]">
+                  <span>☕ Chai Cups Owed to Shaurya:</span>
+                  <span class="text-retro-pink">42 CUPS</span>
+                </li>
+                <li class="flex items-center justify-between bg-white p-2 border-2 border-black shadow-[2px_2px_0px_#000000]">
+                  <span>🌙 3 AM Rants Logged:</span>
+                  <span class="text-electric-blue">108 SESSIONS</span>
+                </li>
+                <li class="flex items-center justify-between bg-white p-2 border-2 border-black shadow-[2px_2px_0px_#000000]">
+                  <span>🛡️ Corporate PR Filter:</span>
+                  <span class="text-green-600">0% (NONE)</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-2 border-t-2 border-black text-center font-code-snippet text-[10px] font-bold">
+              ★ NO REFUNDS • CHAI DEBT NEVER DIES ★
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <!-- ================= END PUBLIC VIEW ================= -->
+
+    <!-- ================= SHAURYA'S PRIVATE VAULT SANCTUARY VIEW ================= -->
+    <div id="vaultSanctuaryView" class="hidden flex-col w-full pb-12">
+      
+      <!-- Vault Header Strip -->
+      <div class="w-full bg-pitch-black text-white p-4 border-4 border-black shadow-[8px_8px_0px_#EC4899] mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-canary-yellow animate-ping"></span>
+            <span class="px-2 py-0.5 bg-retro-pink text-white font-code-snippet text-xs font-black uppercase border border-black">
+              SANCTUARY UNLOCKED
+            </span>
+          </div>
+          <h2 class="font-headline-lg text-2xl md:text-3xl text-canary-yellow uppercase font-black mt-1">
+            SHAURYA'S PRIVATE ARCHIVE &amp; CORKBOARD
+          </h2>
+          <p class="font-code-snippet text-xs text-white/80">
+            Keeper Access Granted. All uncurated whispers from trusted comrades are safely sealed below.
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="vaultSlideshowBtn" class="px-3 py-1.5 bg-canary-yellow text-pitch-black font-headline-sm text-xs font-black uppercase border-2 border-black shadow-[2px_2px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">slideshow</span>
+            <span>SLIDESHOW</span>
+          </button>
+          <button id="vaultExportBtn" class="px-3 py-1.5 bg-white text-pitch-black font-headline-sm text-xs font-black uppercase border-2 border-black shadow-[2px_2px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">download</span>
+            <span>EXPORT JSON</span>
+          </button>
+          <button id="vaultChangePasswordBtn" class="px-3 py-1.5 bg-electric-blue text-white font-headline-sm text-xs font-black uppercase border-2 border-black shadow-[2px_2px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">lock_reset</span>
+            <span>CHANGE PASSWORD</span>
+          </button>
+          <button id="vaultLockBtn" class="px-3 py-1.5 bg-retro-pink text-white font-headline-sm text-xs font-black uppercase border-2 border-black shadow-[2px_2px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">lock</span>
+            <span>LOCK VAULT</span>
+          </button>
+        </div>
       </div>
-    </section>
 
-    <!-- FUNKY 5 RULES OF TRIPATHI SECTION (HACKMIT STYLE TILES) -->
-    <section class="rules-tiles-section">
-      <div class="rules-section-header">
-        <span class="rules-eyebrow">THE OFFICIAL HANDBOOK</span>
-        <h2 class="rules-title">THE 5 COMMANDMENTS OF THE <span class="hindi-font">त्रिपाठी</span> ARCHIVE</h2>
-      </div>
-
-      <div class="rules-grid">
-        <div class="rule-card">
-          <div class="rule-badge">01</div>
-          <h3 class="rule-card-title">MAX 20 WORDS</h3>
-          <p class="rule-card-desc">Keep it sweet, funny, or brutally honest. Shaurya reads all of them, so make every word hit hard.</p>
+      <!-- Search & Filters Toolbar -->
+      <div class="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_#000000] mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex-1 min-w-[240px]">
+          <div class="relative">
+            <input type="text" id="vaultSearchInput" placeholder="Search by friend alias or whisper..." class="w-full bg-[#FEFCE8] border-2 border-black px-3 py-2 font-code-snippet text-xs text-black placeholder:text-gray-500 focus:outline-none focus:shadow-[3px_3px_0px_#2563EB] font-bold">
+            <span class="material-symbols-outlined absolute right-3 top-2 text-black text-[18px]">search</span>
+          </div>
         </div>
 
-        <div class="rule-card">
-          <div class="rule-badge">02</div>
-          <h3 class="rule-card-title">NO FILTER REQUIRED</h3>
-          <p class="rule-card-desc">Candid smiles, goofy grimaces, and chaotic hair days are 100x more valuable than polished poses.</p>
-        </div>
-
-        <div class="rule-card">
-          <div class="rule-badge">03</div>
-          <h3 class="rule-card-title">PRIVATE & SACRED</h3>
-          <p class="rule-card-desc">This is not for the public internet. Only Shaurya has the Master PIN to access this sanctuary.</p>
-        </div>
-
-        <div class="rule-card">
-          <div class="rule-badge">04</div>
-          <h3 class="rule-card-title">ANY LANGUAGE GOES</h3>
-          <p class="rule-card-desc">English, Hindi (हिंदी), Hinglish, inside slang—write exactly how you speak with Tripathi in real life.</p>
-        </div>
-
-        <div class="rule-card">
-          <div class="rule-badge">05</div>
-          <h3 class="rule-card-title">TRIPATHI WALL OF FAME</h3>
-          <p class="rule-card-desc">Once sealed, you are officially part of Shaurya's Inner Circle archive forever. Free chai guaranteed next time we meet!</p>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="font-headline-sm text-xs uppercase font-black mr-1">MOOD:</span>
+          <button class="vault-filter-pill px-2.5 py-1 bg-canary-yellow text-black border-2 border-black font-code-snippet text-xs font-black shadow-[2px_2px_0px_#000000]" data-mood="all">
+            ALL
+          </button>
+          <button class="vault-filter-pill px-2.5 py-1 bg-white text-black border-2 border-black font-code-snippet text-xs font-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow" data-mood="Bakchodi">
+            BAKCHODI 🔥
+          </button>
+          <button class="vault-filter-pill px-2.5 py-1 bg-white text-black border-2 border-black font-code-snippet text-xs font-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow" data-mood="Chai & Rant">
+            CHAI &amp; RANT ☕
+          </button>
+          <button class="vault-filter-pill px-2.5 py-1 bg-white text-black border-2 border-black font-code-snippet text-xs font-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow" data-mood="Nostalgia">
+            NOSTALGIA 📼
+          </button>
+          <button class="vault-filter-pill px-2.5 py-1 bg-white text-black border-2 border-black font-code-snippet text-xs font-black shadow-[2px_2px_0px_#000000] hover:bg-canary-yellow" data-mood="Sirius Talk">
+            SIRIUS TALK 🗝️
+          </button>
         </div>
       </div>
-    </section>
 
-    <!-- FOOTER WITH RETRO CHARMS -->
-    <footer class="capsule-footer">
-      <div class="footer-divider-ribbon">
-        <span class="ribbon-symbol">⚜</span>
-        <span class="ribbon-text">THE TIME-HONORED <span class="hindi-font">त्रिपाठी</span> ARCHIVE • EST. 2026</span>
-        <span class="ribbon-symbol">⚜</span>
+      <!-- Corkboard Polaroid Grid -->
+      <div id="corkboardGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Rendered dynamically by JavaScript -->
       </div>
-      <p class="footer-credits">
-        Curated by Shaurya Tripathi • Made with HackMIT spirit • Safe sanctuary for the real ones
-      </p>
-    </footer>
+
+      <!-- Empty State -->
+      <div id="vaultEmptyState" class="hidden p-12 text-center bg-white border-4 border-dashed border-black">
+        <span class="material-symbols-outlined text-6xl text-gray-400 mb-2">inventory_2</span>
+        <h3 class="font-headline-lg text-lg uppercase font-black">NO MEMORIES MATCH THIS CRITERIA</h3>
+        <p class="font-code-snippet text-xs text-gray-600 mt-1">Check back later or invite friends to snap moments into the capsule.</p>
+      </div>
+
+    </div>
+    <!-- ================= END VAULT VIEW ================= -->
+
   </main>
 
-  <!-- CELEBRATION ENVELOPE MODAL (AFTER FRIEND SUBMITS) -->
-  <div class="celebration-modal hidden" id="celebrationModal" role="dialog" aria-modal="true">
-    <div class="celebration-backdrop"></div>
-    <div class="envelope-showcase">
-      <div class="letter-envelope" id="letterEnvelope">
-        <div class="envelope-flap"></div>
-        <div class="envelope-wax-stamp">
-          <span class="wax-seal-hindi-large">त्रिपाठी</span>
+  <!-- ================= FOOTER ================= -->
+  <footer class="w-full bg-white mt-12 border-t-4 border-black">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-20 border-3 border-black p-1 flex flex-col items-center justify-between text-center rotate-3 bg-canary-yellow shadow-[4px_4px_0px_#000000]">
+          <span class="font-code-snippet text-[10px] text-pitch-black font-black uppercase leading-none">POSTAGE</span>
+          <span class="material-symbols-outlined text-pitch-black text-[24px]">local_post_office</span>
+          <span class="font-headline-sm text-[9px] text-pitch-black font-black leading-none">₹ 5.00</span>
         </div>
-        <div class="envelope-paper-slip">
-          <p class="slip-title">MEMORY LOCKED IN 🔐</p>
-          <p class="slip-name" id="successFriendName">Friend</p>
-          <p class="slip-time">Safely stored for Shaurya Tripathi.</p>
+        <div>
+          <div class="font-headline-sm text-sm text-pitch-black uppercase font-black">
+            The Tripathi Archive &amp; Friendship Capsule
+          </div>
+          <div class="font-body-sm text-xs text-pitch-black/80 font-bold">
+            Uncurated digital zine // Indelible friendship ink
+          </div>
         </div>
       </div>
+
+      <div class="text-right flex flex-col items-center md:items-end gap-1 max-w-xl">
+        <div class="inline-block px-3 py-1 bg-electric-blue text-white font-code-snippet text-xs uppercase border-2 border-black shadow-[3px_3px_0px_#000000] font-black text-left md:text-right">
+          THIS IS MADE JUST FOR FUN , WHEN I HAD NOTHING FIXED TO DO , SO KEEP CALM AND CHECK TRIPATHI WTF VLOGS
+        </div>
+        <div class="font-body-sm text-xs text-pitch-black/80 font-bold mt-1">
+          © 2026 Shaurya Tripathi &amp; The Inner Circle. All memories unclipped.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Vault Password Login Modal (Zero Hints, Alphanumeric Password) -->
+  <div id="vaultLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-canary-yellow border-4 border-black shadow-[8px_8px_0px_#000000] p-6 max-w-sm w-full relative">
+      <!-- Washi tape decoration -->
+      <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-32 h-6 bg-retro-pink -rotate-2 border-2 border-black shadow-[2px_2px_0px_#000000]"></div>
       
-      <div class="celebration-actions">
-        <h3 class="celebrate-title">YOU'RE A LEGEND! (शुक्रिया दोस्त)</h3>
-        <p class="celebrate-desc">Your photo and whisper have been sealed into Tripathi's private vault forever.</p>
-        <button type="button" class="btn-primary" id="submitAnotherBtn">
-          SNAP ANOTHER ONE 📸
+      <div class="flex items-center justify-between border-b-3 border-black pb-3 mb-4 mt-1">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl text-pitch-black">lock</span>
+          <h3 class="font-headline-lg text-lg text-pitch-black uppercase font-black">KEEPER'S VAULT ACCESS</h3>
+        </div>
+        <button id="closePinModalBtn" class="w-7 h-7 bg-white text-black border-2 border-black font-black flex items-center justify-center hover:bg-retro-pink hover:text-white transition-colors">
+          ✕
+        </button>
+      </div>
+
+      <p class="font-code-snippet text-xs text-pitch-black font-bold mb-4">
+        Enter Master Password to open Shaurya's uncurated friendship sanctuary.
+      </p>
+
+      <!-- Password Login Form -->
+      <form id="vaultLoginForm" class="space-y-4">
+        <div>
+          <label for="vaultPasswordInput" class="block font-headline-sm text-xs uppercase font-black mb-1">
+            SECRET PASSWORD:
+          </label>
+          <div class="relative">
+            <input type="password" id="vaultPasswordInput" required placeholder="Enter password..." class="w-full bg-white border-3 border-black p-3 pr-10 font-code-snippet text-sm font-bold text-black focus:outline-none focus:shadow-[4px_4px_0px_#2563EB] transition-all">
+            <button type="button" id="togglePasswordVisibilityBtn" class="absolute right-3 top-3 text-black hover:text-retro-pink" title="Toggle visibility">
+              <span class="material-symbols-outlined text-[20px]" id="eyeIcon">visibility</span>
+            </button>
+          </div>
+          <div id="passwordErrorMessage" class="hidden text-retro-pink font-code-snippet text-xs font-black mt-2 text-center bg-pitch-black py-1 px-2 border border-black">
+            [INCORRECT PASSWORD // ACCESS DENIED]
+          </div>
+        </div>
+
+        <button type="submit" id="submitLoginPasswordBtn" class="w-full py-3 bg-pitch-black text-canary-yellow font-headline-sm text-sm uppercase border-3 border-black shadow-[4px_4px_0px_#2563EB] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center justify-center gap-2 font-black">
+          <span class="material-symbols-outlined text-[18px]">key</span>
+          <span>UNLOCK VAULT 🗝️</span>
+        </button>
+      </form>
+
+      <!-- Option to change password with previous password -->
+      <div class="mt-4 pt-3 border-t-2 border-black text-center">
+        <button type="button" id="openResetPasswordModalBtn" class="font-code-snippet text-xs font-black text-pitch-black underline hover:text-retro-pink">
+          ⚙️ Change Password (Use Previous Password)
         </button>
       </div>
     </div>
   </div>
 
-  <!-- KEEPER'S SECRET PIN MODAL (ACCESS TRIGGERED BY FLOATING KEY) -->
-  <div class="vault-login-modal hidden" id="vaultLoginModal" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" id="loginModalBackdrop"></div>
-    <div class="vault-login-box">
-      <button class="modal-close-btn" id="closeLoginModalBtn" aria-label="Close modal">✕</button>
-
-      <div class="vault-crest-art">
-        <div class="vault-crest-circle">
-          <span class="vault-crest-hindi">त्रि</span>
+  <!-- 2. Memory Detail Inspector Modal -->
+  <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white border-4 border-black shadow-[10px_10px_0px_#000000] p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto relative">
+      <div class="flex items-center justify-between border-b-3 border-black pb-3 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 bg-canary-yellow text-black font-code-snippet text-xs font-black uppercase border border-black" id="detailMoodBadge">
+            MOOD
+          </span>
+          <span class="font-code-snippet text-xs text-gray-600 font-bold" id="detailTimestamp">
+            DATE
+          </span>
         </div>
-      </div>
-
-      <span class="vault-modal-eyebrow">SANCTUM ACCESS</span>
-      <h3 class="vault-modal-title">THE <span class="hindi-font">त्रिपाठी</span> VAULT</h3>
-      <p class="vault-modal-desc">Hey Shaurya! Enter your master PIN to view your people's moments.</p>
-
-      <div class="pin-entry-container">
-        <div class="pin-input-wrap">
-          <input 
-            type="password" 
-            id="vaultPinInput" 
-            placeholder="••••" 
-            maxlength="10" 
-            autocomplete="current-password"
-          />
-        </div>
-        <div class="keypad-grid" id="pinKeypad">
-          <button type="button" class="key-digit" data-val="1">1</button>
-          <button type="button" class="key-digit" data-val="2">2</button>
-          <button type="button" class="key-digit" data-val="3">3</button>
-          <button type="button" class="key-digit" data-val="4">4</button>
-          <button type="button" class="key-digit" data-val="5">5</button>
-          <button type="button" class="key-digit" data-val="6">6</button>
-          <button type="button" class="key-digit" data-val="7">7</button>
-          <button type="button" class="key-digit" data-val="8">8</button>
-          <button type="button" class="key-digit" data-val="9">9</button>
-          <button type="button" class="key-digit key-clear" id="keypadClear">CLR</button>
-          <button type="button" class="key-digit" data-val="0">0</button>
-          <button type="button" class="key-digit key-enter" id="keypadSubmit">OK</button>
-        </div>
-      </div>
-
-      <p class="pin-error-msg hidden" id="pinErrorMsg">Incorrect PIN. Only Shaurya Tripathi may enter.</p>
-      <div class="pin-hint-note">Default Keeper PIN: <code>0007</code> (Changeable inside the vault)</div>
-    </div>
-  </div>
-
-  <!-- PRIVATE VAULT SANCTUARY VIEW (HOST ONLY) -->
-  <section class="vault-sanctuary hidden" id="vaultSanctuary">
-    <div class="vault-top-banner">
-      <div class="vault-banner-info">
-        <span class="pill-tag text-amber">🔐 SANCTUARY UNLOCKED</span>
-        <h2 class="vault-owner-heading">SHAURYA'S INNER CIRCLE</h2>
-        <p class="vault-owner-sub">Every unvarnished smile, memory, and whisper sent by your friends to <span class="hindi-font">त्रिपाठी</span>.</p>
-      </div>
-
-      <div class="vault-admin-actions">
-        <button type="button" class="vault-action-btn" id="vaultCloudBtn">
-          ☁️ CLOUD SYNC
-        </button>
-        <button type="button" class="vault-action-btn" id="vaultSlideshowBtn">
-          📽️ SLIDESHOW
-        </button>
-        <button type="button" class="vault-action-btn" id="vaultSettingsBtn">
-          ⚙️ CHANGE PIN
-        </button>
-        <button type="button" class="vault-action-btn" id="vaultExportBtn">
-          📥 EXPORT ALL
-        </button>
-        <button type="button" class="vault-action-btn btn-danger" id="vaultLockBtn">
-          🔒 LOCK VAULT
+        <button id="closeDetailModalBtn" class="w-7 h-7 bg-white text-black border-2 border-black font-black flex items-center justify-center hover:bg-retro-pink hover:text-white transition-colors">
+          ✕
         </button>
       </div>
-    </div>
 
-    <!-- FILTER & SEARCH BAR -->
-    <div class="vault-filter-toolbar">
-      <div class="vault-search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="vaultSearchInput" placeholder="Search by friend's name or note words..." />
+      <!-- Photo Display with Stickers -->
+      <div class="relative bg-pitch-black border-3 border-black aspect-[4/3] overflow-hidden mb-4">
+        <img id="detailPhotoImg" class="w-full h-full object-cover" src="" alt="Memory Photo">
+        <div id="detailStickersLayer" class="absolute inset-0 pointer-events-none"></div>
       </div>
 
-      <div class="vault-mood-filters" id="vaultMoodFilters">
-        <button type="button" class="vault-filter-pill active" data-vfilter="all">ALL (<span id="countAll">0</span>)</button>
-        <button type="button" class="vault-filter-pill" data-vfilter="Wholesome">🌸 WHOLESOME</button>
-        <button type="button" class="vault-filter-pill" data-vfilter="Late Night">🌙 LATE NIGHT</button>
-        <button type="button" class="vault-filter-pill" data-vfilter="Pure Chaos">⚡ CHAOS</button>
-        <button type="button" class="vault-filter-pill" data-vfilter="Nostalgic">🍂 NOSTALGIC</button>
-        <button type="button" class="vault-filter-pill" data-vfilter="Secret">🗝️ SECRETS</button>
-      </div>
-    </div>
-
-    <!-- MEMORIES CORKBOARD SCRAPBOOK GRID -->
-    <div class="corkboard-canvas" id="corkboardCanvas">
-      <!-- Polaroid memory cards dynamically rendered here -->
-      <div class="vault-empty-state hidden" id="vaultEmptyState">
-        <div class="empty-crest">📦</div>
-        <h3>TRIPATHI'S VAULT IS EMPTY</h3>
-        <p>Send the link to your closest friends. When they upload a photo and note, it will appear here instantly!</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- MEMORY DETAIL / INSPECT MODAL -->
-  <div class="detail-modal hidden" id="detailModal" role="dialog" aria-modal="true">
-    <div class="detail-backdrop" id="detailModalBackdrop"></div>
-    <div class="detail-card-frame" id="detailCardFrame">
-      <button class="modal-close-btn" id="closeDetailModalBtn" aria-label="Close">✕</button>
-      
-      <div class="detail-polaroid-side">
-        <div class="detail-img-box">
-          <img id="detailPhotoImg" alt="Friend Memory" />
-          <div class="detail-stickers-layer" id="detailStickersLayer"></div>
+      <!-- Friend Alias and Note -->
+      <div class="bg-[#FEFCE8] p-4 border-3 border-black mb-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="font-headline-sm text-sm uppercase text-electric-blue font-black" id="detailFriendName">
+            FRIEND NAME
+          </span>
+          <span class="font-code-snippet text-xs font-bold text-gray-500" id="detailWordCount">
+            0 WORDS
+          </span>
         </div>
+        <p class="font-body-md text-sm text-pitch-black font-bold whitespace-pre-line" id="detailNoteText">
+          Note text...
+        </p>
       </div>
 
-      <div class="detail-content-side">
-        <div class="detail-meta-row">
-          <span class="detail-mood-tag" id="detailMoodTag">🌸 WHOLESOME</span>
-          <span class="detail-timestamp" id="detailTimestamp">Just now</span>
-        </div>
-
-        <h3 class="detail-friend-name" id="detailFriendName">Friend Name</h3>
-
-        <div class="detail-note-quote">
-          <span class="quote-mark">“</span>
-          <p id="detailNoteText">Note text goes here</p>
-          <span class="quote-mark right">”</span>
-        </div>
-
-        <div class="detail-word-stat" id="detailWordStat">
-          Word count: 18 / 20
-        </div>
-
-        <div class="detail-modal-footer">
-          <button type="button" class="btn-download" id="downloadPolaroidBtn">
-            📸 SAVE POLAROID
-          </button>
-          <button type="button" class="btn-delete" id="deleteMemoryBtn">
-            🗑️ REMOVE FROM VAULT
-          </button>
-        </div>
+      <!-- Actions -->
+      <div class="flex flex-wrap items-center justify-between gap-2 border-t-2 border-black pt-3">
+        <button id="downloadKeepsakeBtn" class="px-4 py-2 bg-canary-yellow text-black border-2 border-black font-headline-sm text-xs font-black uppercase shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">download</span>
+          <span>SAVE POLAROID PNG</span>
+        </button>
+        <button id="deleteMemoryBtn" class="px-3 py-2 bg-retro-pink text-white border-2 border-black font-headline-sm text-xs font-black uppercase shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">delete</span>
+          <span>DELETE</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- SETTINGS / PIN CHANGE MODAL -->
-  <div class="settings-modal hidden" id="settingsModal" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" id="settingsBackdrop"></div>
-    <div class="settings-dialog">
-      <button class="modal-close-btn" id="closeSettingsBtn">✕</button>
-      <h3 class="settings-title">CHANGE KEEPER PIN</h3>
-      <p class="settings-desc">Choose a new PIN code for opening Shaurya's private vault.</p>
-
-      <div class="settings-input-group">
-        <label for="newPinInput">NEW PIN (At least 4 digits/characters):</label>
-        <input type="password" id="newPinInput" placeholder="e.g. 7890 or secret" maxlength="16" />
-      </div>
-
-      <div class="settings-buttons">
-        <button type="button" class="btn-primary" id="savePinBtn">SAVE NEW PIN</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SLIDESHOW FULLSCREEN MODE -->
-  <div class="slideshow-container hidden" id="slideshowContainer">
-    <button class="slideshow-close-btn" id="closeSlideshowBtn">✕ EXIT SLIDESHOW</button>
-    <div class="slideshow-stage" id="slideshowStage">
-      <!-- Slideshow card injected here -->
-    </div>
-    <div class="slideshow-controls">
-      <button type="button" class="ss-nav-btn" id="ssPrevBtn">◀ PREV</button>
-      <span class="ss-counter" id="ssCounter">1 / 1</span>
-      <button type="button" class="ss-nav-btn" id="ssNextBtn">NEXT ▶</button>
-    </div>
-  </div>
-
-  <!-- CLOUD SYNC SETTINGS MODAL -->
-  <div class="settings-modal hidden" id="cloudModal" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" id="cloudBackdrop"></div>
-    <div class="settings-dialog" style="max-width: 580px;">
-      <button class="modal-close-btn" id="closeCloudBtn">✕</button>
-      <h3 class="settings-title">☁️ CLOUD SYNC (FIREBASE)</h3>
-      <p class="settings-desc">Connect Firebase Firestore so friends can submit memories from any phone or device and they appear instantly in your vault.</p>
-
-      <div style="background: rgba(255,255,255,0.05); padding: 14px; border-radius: 8px; margin-bottom: 16px; border: 1px dashed var(--accent-amber); font-size: 0.85rem; line-height: 1.5;">
-        <div id="cloudStatusIndicator" style="font-weight: bold; margin-bottom: 6px; color: #fcbc72;">
-          STATUS: Checking Cloud connection...
+  <!-- 3. Slideshow Modal -->
+  <div id="slideshowModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 hidden">
+    <button id="closeSlideshowBtn" class="absolute top-4 right-4 z-50 px-4 py-2 bg-retro-pink text-white border-2 border-white font-headline-sm text-sm font-black uppercase shadow-[3px_3px_0px_#FFFFFF]">
+      ✕ EXIT SLIDESHOW
+    </button>
+    <div class="max-w-3xl w-full flex flex-col items-center justify-center text-center">
+      <div class="relative bg-white p-4 border-4 border-white shadow-[10px_10px_0px_#FACC15] max-w-lg w-full mb-4">
+        <div class="relative aspect-[4/3] bg-pitch-black overflow-hidden mb-3">
+          <img id="slideshowImg" class="w-full h-full object-cover" src="" alt="Slideshow Memory">
         </div>
-        <div style="color: #ccc;">
-          1. Go to <a href="https://console.firebase.google.com/" target="_blank" style="color: #f3da8e; text-decoration: underline;">console.firebase.google.com</a> &amp; create a project.<br/>
-          2. In <strong>Firestore Database</strong>, create a database in <strong>Test mode</strong>.<br/>
-          3. Register a Web App, copy <code>const firebaseConfig = { ... }</code>, and paste the values below:
+        <div class="text-left">
+          <span id="slideshowAuthor" class="font-headline-sm text-base uppercase font-black text-black block">FRIEND</span>
+          <p id="slideshowNote" class="font-body-md text-xs text-black font-bold mt-1">Note text</p>
         </div>
       </div>
-
-      <div class="settings-input-group">
-        <label for="firebaseConfigInput">PASTE FIREBASE CONFIG (JSON or JavaScript Object):</label>
-        <textarea id="firebaseConfigInput" rows="6" style="width: 100%; border-radius: 8px; background: rgba(0,0,0,0.4); color: #fff; padding: 10px; font-family: monospace; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2);" placeholder='{
-  "apiKey": "AIzaSy...",
-  "authDomain": "your-app.firebaseapp.com",
-  "projectId": "your-app",
-  "storageBucket": "your-app.appspot.com",
-  "messagingSenderId": "...",
-  "appId": "..."
-}'></textarea>
-      </div>
-
-      <div class="settings-buttons" style="display: flex; gap: 10px; margin-top: 15px;">
-        <button type="button" class="btn-primary" id="saveCloudConfigBtn" style="flex: 1;">SAVE &amp; CONNECT CLOUD</button>
-        <button type="button" class="btn-danger" id="clearCloudConfigBtn" style="padding: 10px 15px;">RESET</button>
+      <div class="flex items-center gap-4 text-white">
+        <button id="prevSlideBtn" class="px-4 py-2 bg-white text-black font-black uppercase border-2 border-white">◀ PREV</button>
+        <span id="slideshowCounter" class="font-code-snippet text-xs font-bold">1 / 1</span>
+        <button id="nextSlideBtn" class="px-4 py-2 bg-white text-black font-black uppercase border-2 border-white">NEXT ▶</button>
       </div>
     </div>
   </div>
 
-  <!-- Hidden Canvas for rendering polaroid downloads -->
-  <canvas id="exportCanvas" style="display:none;"></canvas>
+  <!-- 4. Real-time Device-to-Device Change Password Modal -->
+  <div id="changePasswordModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+    <div class="bg-white border-4 border-black shadow-[8px_8px_0px_#000000] p-6 max-w-sm w-full relative">
+      <div class="flex items-center justify-between border-b-2 border-black pb-2 mb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-xl text-electric-blue">sync_lock</span>
+          <h3 class="font-headline-lg text-sm text-pitch-black uppercase font-black">SYNC NEW PASSWORD</h3>
+        </div>
+        <button id="closeChangePasswordBtn" class="w-6 h-6 border-2 border-black font-black flex items-center justify-center hover:bg-retro-pink hover:text-white transition-colors">✕</button>
+      </div>
 
-  <!-- Firebase Cloud SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="js/firebase-config.js"></script>
+      <p class="font-code-snippet text-[11px] text-gray-700 font-bold mb-3">
+        To change password from any device, enter your current/previous password to authenticate.
+      </p>
+
+      <form id="changePasswordForm" class="space-y-3">
+        <div>
+          <label for="currentPasswordInput" class="block font-code-snippet text-xs font-black mb-1">
+            CURRENT / PREVIOUS PASSWORD:
+          </label>
+          <input type="password" id="currentPasswordInput" required placeholder="Enter previous password" class="w-full border-2 border-black p-2 font-code-snippet text-xs font-bold">
+        </div>
+
+        <div>
+          <label for="newPasswordInput" class="block font-code-snippet text-xs font-black mb-1">
+            NEW PASSWORD:
+          </label>
+          <input type="password" id="newPasswordInput" required minlength="4" placeholder="Minimum 4 characters" class="w-full border-2 border-black p-2 font-code-snippet text-xs font-bold">
+        </div>
+
+        <div>
+          <label for="confirmPasswordInput" class="block font-code-snippet text-xs font-black mb-1">
+            CONFIRM NEW PASSWORD:
+          </label>
+          <input type="password" id="confirmPasswordInput" required minlength="4" placeholder="Re-enter new password" class="w-full border-2 border-black p-2 font-code-snippet text-xs font-bold">
+        </div>
+
+        <div id="changePassMessage" class="hidden text-xs font-code-snippet font-black p-1 text-center border border-black"></div>
+
+        <button type="submit" id="saveNewPasswordBtn" class="w-full py-2.5 bg-electric-blue text-white font-headline-sm text-xs uppercase font-black border-2 border-black shadow-[3px_3px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5">
+          UPDATE ACROSS ALL DEVICES 🔄
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App Script -->
   <script src="js/app.js"></script>
 </body>
 </html>
