@@ -1100,9 +1100,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (vaultCloudStatusBanner) {
           vaultCloudStatusBanner.className = 'bg-[#FEF08A] border-4 border-black p-3 mb-6 shadow-[5px_5px_0px_#000] flex flex-wrap items-center justify-between gap-2';
         }
-        vaultCloudStatusText.innerHTML = `⚡ <strong>MULTI-DEVICE PERSISTENCE ON VERCEL:</strong> To sync snapshots between phone and laptop on Vercel, connect free <strong>Vercel KV</strong> under your Vercel Dashboard Storage tab.`;
+        vaultCloudStatusText.innerHTML = `⚡ <strong>SUPABASE CLOUD SYNC:</strong> Set <strong>SUPABASE_URL</strong> and <strong>SUPABASE_KEY</strong> in Vercel to sync snapshots & password across all devices!`;
         if (vaultCloudActionArea) {
-          vaultCloudActionArea.innerHTML = `<a href="https://vercel.com/docs/storage/vercel-kv" target="_blank" class="underline text-black font-black hover:text-retro-pink">1-CLICK KV ↗</a>`;
+          vaultCloudActionArea.innerHTML = `<span class="px-2 py-0.5 bg-pitch-black text-canary-yellow font-code-snippet text-[11px] font-black uppercase border border-black">SETUP SUPABASE</span>`;
         }
       }
     } catch (_) {}

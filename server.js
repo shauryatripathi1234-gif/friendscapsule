@@ -45,7 +45,44 @@ if (!fs.existsSync(MEMORIES_FILE)) {
   fs.writeFileSync(MEMORIES_FILE, JSON.stringify([], null, 2));
 }
 
-// Cloud Database Connections (Vercel KV / Upstash Redis / Firebase)
+// Load .env locally if exists (without external dependencies)
+const envFile = path.join(__dirname, '.env');
+if (fs.existsSync(envFile)) {
+  try {
+    const envLines = fs.readFileSync(envFile, 'utf8').split('\n');
+    for (const line of envLines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const idx = trimmed.indexOf('=');
+      if (idx > 0) {
+        const key = trimmed.slice(0, idx).trim();
+        let val = trimmed.slice(idx + 1).trim();
+        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+          val = val.slice(1, -1);
+        }
+        if (!process.env[key]) {
+          process.env[key] = val;
+        }
+      }
+    }
+  } catch (_) {}
+}
+
+// Cloud Database Connections (Supabase / Vercel KV / Upstash Redis / Firebase)
+const { createClient } = require('@supabase/supabase-js');
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+
+let supabase = null;
+if (SUPABASE_URL && SUPABASE_KEY) {
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('⚡ Supabase Cloud Client Initialized successfully!');
+  } catch (err) {
+    console.warn('Failed to initialize Supabase client:', err.message);
+  }
+}
+
 const KV_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
 const KV_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 const FIREBASE_DB_URL = process.env.FIREBASE_DATABASE_URL;
@@ -78,7 +115,39 @@ function verifyAuthToken(token) {
 }
 
 async function getConfig() {
-  // 1. Try Vercel KV
+  // 1. Try Supabase
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('vault_config')
+        .select('*')
+        .eq('id', 'primary_config')
+        .maybeSingle();
+
+      if (data && !error) {
+        return {
+          vaultPassword: data.vault_password || '2026',
+          vaultPin: data.vault_password || '2026',
+          previousPassword: data.previous_password || '',
+          title: data.title || 'The Friendship Capsule',
+          subtitle: data.subtitle || 'A private vault of timeless memories for our inner circle'
+        };
+      } else if (!data && !error) {
+        const seedConfig = {
+          id: 'primary_config',
+          vault_password: '2026',
+          title: 'The Friendship Capsule',
+          subtitle: 'A private vault of timeless memories for our inner circle'
+        };
+        await supabase.from('vault_config').upsert(seedConfig);
+        return seedConfig;
+      }
+    } catch (err) {
+      console.warn('Supabase getConfig notice:', err.message);
+    }
+  }
+
+  // 2. Try Vercel KV
   if (KV_URL && KV_TOKEN) {
     try {
       const res = await fetch(`${KV_URL}/get/friendscapsule_config`, {
@@ -92,7 +161,7 @@ async function getConfig() {
     } catch (_) {}
   }
 
-  // 2. Local Fallback
+  // 3. Local Fallback
   try {
     const cfg = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
     if (!cfg.vaultPassword) {
@@ -106,6 +175,23 @@ async function getConfig() {
 }
 
 async function saveConfig(cfg) {
+  // 1. Save to Supabase
+  if (supabase) {
+    try {
+      await supabase.from('vault_config').upsert({
+        id: 'primary_config',
+        vault_password: cfg.vaultPassword || cfg.vaultPin || '2026',
+        previous_password: cfg.previousPassword || '',
+        title: cfg.title || 'The Friendship Capsule',
+        subtitle: cfg.subtitle || '',
+        updated_at: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn('Supabase saveConfig notice:', err.message);
+    }
+  }
+
+  // 2. Save to Vercel KV
   if (KV_URL && KV_TOKEN) {
     try {
       await fetch(`${KV_URL}/set/friendscapsule_config`, {
@@ -118,11 +204,52 @@ async function saveConfig(cfg) {
       });
     } catch (_) {}
   }
+
+  // 3. Local Disk
   try { fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg, null, 2)); } catch (_) {}
 }
 
 async function getMemories() {
-  // 1. Try Vercel KV / Upstash Redis (Shared cloud database across all devices!)
+  // 1. Try Supabase Cloud Database (Primary persistent storage)
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('memories')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (data && !error) {
+        if (data.length > 0) {
+          return data.map(row => ({
+            id: row.id,
+            friendName: row.friend_name,
+            note: row.note,
+            wordCount: row.word_count || 0,
+            photoUrl: row.photo_url,
+            photoBase64: row.photo_url,
+            mood: row.mood || 'Bakchodi',
+            filter: row.filter || 'none',
+            stickers: Array.isArray(row.stickers) ? row.stickers : (typeof row.stickers === 'string' ? JSON.parse(row.stickers || '[]') : []),
+            isPublic: row.is_public === true,
+            createdAt: row.created_at
+          }));
+        } else {
+          // If Supabase table is brand new, seed from local file
+          try {
+            const seedList = JSON.parse(fs.readFileSync(MEMORIES_FILE, 'utf8') || '[]');
+            if (seedList.length > 0) {
+              await saveMemories(seedList);
+              return seedList;
+            }
+          } catch (_) {}
+        }
+      }
+    } catch (err) {
+      console.warn('Supabase getMemories notice:', err.message);
+    }
+  }
+
+  // 2. Try Vercel KV / Upstash Redis
   if (KV_URL && KV_TOKEN) {
     try {
       const res = await fetch(`${KV_URL}/get/friendscapsule_memories`, {
@@ -138,7 +265,7 @@ async function getMemories() {
     }
   }
 
-  // 2. Try Firebase Realtime Database
+  // 3. Try Firebase Realtime Database
   if (FIREBASE_DB_URL) {
     try {
       const cleanUrl = FIREBASE_DB_URL.replace(/\/$/, '');
@@ -151,7 +278,7 @@ async function getMemories() {
     }
   }
 
-  // 3. Fallback to Local/Seed file
+  // 4. Fallback to Local/Seed file
   try {
     const list = JSON.parse(fs.readFileSync(MEMORIES_FILE, 'utf8'));
     let changed = false;
@@ -183,7 +310,28 @@ async function getMemories() {
 }
 
 async function saveMemories(memories) {
-  // 1. Save to Vercel KV / Upstash if configured
+  // 1. Save to Supabase Cloud Database
+  if (supabase) {
+    try {
+      const rows = memories.map(m => ({
+        id: m.id,
+        friend_name: m.friendName,
+        note: m.note,
+        word_count: m.wordCount || 0,
+        photo_url: m.photoUrl,
+        mood: m.mood || 'Bakchodi',
+        filter: m.filter || 'none',
+        stickers: m.stickers || [],
+        is_public: m.isPublic === true,
+        created_at: m.createdAt || new Date().toISOString()
+      }));
+      await supabase.from('memories').upsert(rows, { onConflict: 'id' });
+    } catch (err) {
+      console.warn('Supabase saveMemories notice:', err.message);
+    }
+  }
+
+  // 2. Save to Vercel KV / Upstash if configured
   if (KV_URL && KV_TOKEN) {
     try {
       await fetch(`${KV_URL}/set/friendscapsule_memories`, {
@@ -199,7 +347,7 @@ async function saveMemories(memories) {
     }
   }
 
-  // 2. Save to Firebase Realtime Database if configured
+  // 3. Save to Firebase Realtime Database if configured
   if (FIREBASE_DB_URL) {
     try {
       const cleanUrl = FIREBASE_DB_URL.replace(/\/$/, '');
@@ -213,7 +361,7 @@ async function saveMemories(memories) {
     }
   }
 
-  // 3. Save locally
+  // 4. Save locally
   try {
     fs.writeFileSync(MEMORIES_FILE, JSON.stringify(memories, null, 2));
   } catch (_) {}
@@ -254,15 +402,21 @@ function countWords(str) {
 
 // Cloud health & database connection diagnostic
 app.get('/api/health-cloud', (req, res) => {
+  const hasSupabase = !!supabase;
   const hasKV = !!(KV_URL && KV_TOKEN);
   const hasFirebase = !!FIREBASE_DB_URL;
+  const cloudConnected = hasSupabase || hasKV || hasFirebase;
+  const provider = hasSupabase
+    ? 'Supabase Cloud PostgreSQL'
+    : (hasKV ? 'Vercel KV (Upstash)' : (hasFirebase ? 'Firebase Realtime DB' : 'Local Disk'));
+
   res.json({
     isVercel,
-    cloudConnected: hasKV || hasFirebase,
-    provider: hasKV ? 'Vercel KV (Upstash)' : (hasFirebase ? 'Firebase Realtime DB' : 'Local Disk'),
-    notice: (hasKV || hasFirebase)
-      ? 'Cloud storage is active. Memories sync in real time across all devices!'
-      : 'Vercel is running on ephemeral storage. Connect 1-click Vercel KV for persistent cross-device memory sync.'
+    cloudConnected,
+    provider,
+    notice: cloudConnected
+      ? `✨ ${provider} is active! Memories and master password sync live across all devices.`
+      : '⚠️ Running in local storage mode. Add SUPABASE_URL & SUPABASE_KEY to your Vercel Environment Variables to sync across devices.'
   });
 });
 
@@ -424,6 +578,11 @@ app.get('/api/vault/memories', requireVaultAuth, async (req, res) => {
 // Delete a memory (HOST ONLY)
 app.delete('/api/vault/memories/:id', requireVaultAuth, async (req, res) => {
   const { id } = req.params;
+  if (supabase) {
+    try {
+      await supabase.from('memories').delete().eq('id', id);
+    } catch (_) {}
+  }
   let memories = await getMemories();
   const target = memories.find(m => m.id === id);
 
@@ -444,6 +603,11 @@ app.post('/api/vault/memories/:id/toggle-public', requireVaultAuth, async (req, 
 
   if (target) {
     target.isPublic = !target.isPublic;
+    if (supabase) {
+      try {
+        await supabase.from('memories').update({ is_public: target.isPublic }).eq('id', id);
+      } catch (_) {}
+    }
     await saveMemories(memories);
     res.json({
       success: true,
